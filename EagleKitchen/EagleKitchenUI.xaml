@@ -1,0 +1,193 @@
+﻿<!-- add your namespace declaration here -->
+<Page
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+
+             x:Class="four.EagleKitchen.EagleKitchenUi"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="AliceBlue"
+             >
+    <Page.Resources>
+        <!-- Button: Go To Page -->
+        <Style TargetType="{x:Type Button}" x:Key="CommonButtonStyle">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="DarkBlue" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Grid>
+
+        <TabControl>
+
+            <TabItem Header="Selections">
+                <Grid Margin="10 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="180"/>
+                        <RowDefinition Height="70"/>
+                    </Grid.RowDefinitions>
+
+                    <!--Properties Panel-->
+                    <Border Grid.Row="0" 
+                            Margin="0 4" BorderBrush="DarkGray"
+                            BorderThickness="1" CornerRadius="4" 
+                            >
+                        <ScrollViewer MaxHeight="200" BorderBrush="#FFFF0808" VerticalScrollBarVisibility="Visible" Margin="2" >
+                            <StackPanel>
+                                <TextBlock Text="CoreData::"/>
+                                <TextBlock x:Name="CoreData"/>
+                                <TextBlock Text="Properties Panel"/>
+                                <TextBlock Text="Properties Panel"/>
+                                <TextBlock Text="Properties Panel"/>
+                                <TextBlock Text="Properties Panel"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!--Style/Material/Handles-->
+                    <Border Grid.Row="1"
+                            Margin="0 10" BorderBrush="DarkGray"
+                            BorderThickness="1" CornerRadius="4" 
+                            >
+                        <StackPanel CanHorizontallyScroll="True" Margin="4"
+                                >
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="ⓘ" FontWeight="Bold" Margin="0 0 4px 0"/>
+                                <TextBlock Text="Choose Style, Material, HandleSets"/>
+                            </StackPanel>
+                            <TabControl>
+                                <TabItem Header="Style">
+                                    <StackPanel CanHorizontallyScroll="True" Orientation="Horizontal">
+                                        <Button Click="ClickCustomizeStyleHenning"
+                                        Width="100" Height="100" Margin="5">
+                                            <Button.Background>
+                                                <!--<ImageBrush ImageSource="{util:Utils.ImageUtilities.GetCabinetStyleImage('henning.png')}" />-->
+                                                <ImageBrush ImageSource="{Binding four.Utils.ImageUtils.GetCabinetStyleImage}" />
+                                                <!--<ImageBrush ImageSource="pack://application:,,,/EagleKitchen/img/henning.png"/>-->
+                                            </Button.Background>
+                                            <Grid>
+                                                <TextBlock Text="Henning" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                        MinWidth="100" MinHeight="100" Foreground="Black"
+                                        FontWeight="Bold" FontSize="20px"
+                                        />
+                                            </Grid>
+                                        </Button>
+                                        <Button Grid.Row="0" Grid.Column="1" Click="ClickCustomizeStyleMarquez"
+                                        Width="100" Height="100" Margin="5">
+                                            <Grid>
+                                                <!--<Grid Background="{StaticResource StillWater}">-->
+                                                <TextBlock Text="Marquez" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                        MinWidth="100" MinHeight="100" Foreground="Black"
+                                        FontWeight="Bold" FontSize="20px"
+                                        />
+                                            </Grid>
+                                        </Button>
+                                        <Button Grid.Row="0" Grid.Column="2" Width="100" Height="100" Margin="5">
+                                            <Grid>
+                                                <!--<Grid Background="{StaticResource YourImageBrush}">-->
+                                                <TextBlock Text="Touraine Birch" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                                            </Grid>
+                                        </Button>
+                                        <Button Grid.Row="1" Grid.Column="0" Width="100" Height="100" Margin="5">
+                                            <Grid>
+                                                <!--<Grid Background="{StaticResource YourImageBrush}">-->
+                                                <TextBlock Text="Still Water" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                                            </Grid>
+                                        </Button>
+                                        <Button Grid.Row="1" Grid.Column="1" Width="100" Height="100" Margin="5">
+                                            <Grid>
+                                                <!--<Grid Background="{StaticResource YourImageBrush}">-->
+                                                <TextBlock Text="FillMore" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                                            </Grid>
+                                        </Button>
+                                        <Button Grid.Row="1" Grid.Column="2" Width="100" Height="100" Margin="5">
+                                            <Grid>
+                                                <!--<Grid Background="{StaticResource YourImageBrush}">-->
+                                                <TextBlock Text="Langdon" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                                            </Grid>
+                                        </Button>
+
+                                        <!-- Repeat similar structure for other buttons, changing Grid.Column, Text, and Background as needed -->
+                                    </StackPanel>
+                                </TabItem>
+                                <TabItem Header="Finish">
+                                    <Grid>
+                                        <TextBlock Text="Choose a Finish for your cabinet"/>
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="Handles" >
+                                    <Grid>
+                                        <TextBlock Text="Choose a Finish for your cabinet" Grid.ColumnSpan="4"/>
+                                    </Grid>
+                                </TabItem>
+                            </TabControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Selections :: Bottom Panel -->
+                    <!--<Border Grid.Row="2" Background="AliceBlue"
+                            BorderBrush="DarkGray" BorderThickness="2" CornerRadius="4" Padding="4">-->
+                    <StackPanel Grid.Row="2"  Orientation="Vertical" VerticalAlignment="Center" >
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 4">
+                            <TextBlock Text="ⓘ" FontWeight="Bold" Margin="0 0 4px 0"/>
+                            <TextBlock Text="Info: Use these controls to select Cabinet's based on their configuration."/>
+                        </StackPanel>
+                        <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
+                            <Button Content="All: 1 Door" Margin="5px" Click="ClickSelectionAll1Door"/>
+                            <Button Content="Only: 1 Door" Margin="5px" Click="ClickSelectionOnly1Door"/>
+                            <Button Content="Only: 1 Door + Drawer" Margin="5px" Click="ClickSelectionOnly1Door1Drawer"/>
+                            <Button Content="All: 2 Doors" Margin="5px" Click="ClickSelectionAll2Doors"/>
+                            <Button Content="Only: 2 Doors" Margin="5px" Click="ClickSelectionOnly2Doors"/>
+                            <Button Content="Only: 2 Doors + 1 Drawer" Margin="5px" Click="ClickSelectionOnly2Doors1Drawer"/>
+                            <Button Content="Only: 2 Doors + 2 Drawer" Margin="5px" Click="ClickSelectionOnly2Doors2Drawers"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <!--</Border>-->
+                </Grid>
+                <!--Container of Customizations Tab-->
+            </TabItem>
+
+            <TabItem Header="Visualizations">
+                <StackPanel>
+                    <StackPanel x:Name="UIPages">
+                        <TextBlock Text="Sheets" FontSize="16" FontWeight="Bold" Padding="5"/>
+                    </StackPanel>
+                    <StackPanel x:Name="UIViews">
+                        <TextBlock Text="Views" FontSize="16" FontWeight="Bold" Padding="5"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Developer Debug">
+
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Text="Console"/>
+                    <TextBlock x:Name="EagleConsoleTextBlock"/>
+                </StackPanel>
+                    <TextBlock x:Name="UIActiveSelections" Text="None" />
+                    <Button x:Name="DeleteActiveSelection" Content="Delete" Width="100" Height="50" Click="ClickDeleteButton" Background="#FFF68989" BorderBrush="Black"/>
+                    <!--<Button x:Name="Show3DView" Content="Open View: EK-3D" Width="100" Height="50" Click="ClickOpenView" Background="#FF0784FF"/>-->
+                    <Button x:Name="DevTest" Visibility="Visible" Content="DevTest" Width="100" Height="50" Click="ClickDevTest" Background="#FFA655DA"/>
+                </StackPanel>
+            </TabItem>
+
+
+        </TabControl>
+
+    </Grid>
+</Page>
