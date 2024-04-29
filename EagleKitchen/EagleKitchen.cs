@@ -54,17 +54,15 @@ namespace four.EagleKitchen
             //      Document doc = app.ActiveUIDocument.Document;
             // OR you can use the methods available on the <particular>EventArgs variable
 
-            var doc = e.GetDocument();
-
-            var app = sender as UIApplication;
-            var uiDoc = app.ActiveUIDocument;
+            UIApplication app = sender as UIApplication;
+            UIDocument uiDoc = app.ActiveUIDocument;
+            Document doc = app.ActiveUIDocument.Document;
+            //var doc = e.GetDocument();    // could've used this directly if all we want is Document
 
             Selection currentSelection = uiDoc.Selection;
 
-
             if (e.GetSelectedElements().Count == 0) return;
             ActiveSelectedElementIds = e.GetSelectedElements();
-
 
             EagleKitchenDockUtils.EagleKitchenUi.UIActiveSelections.Text = ActiveSelectedElementIds.ToString();
         }
