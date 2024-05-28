@@ -37,7 +37,9 @@ namespace four
             // the first argument is the sender: Here sender is the 'UIApplication' not 'UIControlledApplication' nor 'Application',
             // but however we can type cast to 'Application' type, if we need that type.
             application.SelectionChanged += EagleKitchen.EagleKitchen.OnSelectionChange;
-            application.ControlledApplication.DocumentChanged += EagleKitchen.EagleKitchen.OnDocumentChanged;
+
+
+            application.ViewActivated += EagleKitchen.EagleKitchen.OnViewActivated;
 
             return Result.Succeeded;
         }

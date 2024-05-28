@@ -58,11 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EagleKitchen\CoreModel\Utils.cs" />
-    <Compile Include="EagleKitchen\img\ImageResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ImageResource.resx</DependentUpon>
-    </Compile>
     <Compile Include="EagleKitchen\ShowDockCommand.cs" />
     <Compile Include="EagleKitchen\EagleKitchenDockUtils.cs" />
     <Compile Include="EagleKitchen\EagleKitchenUI.xaml.cs">
@@ -82,10 +77,6 @@
     <None Include="four.addin" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EagleKitchen\img\ImageResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ImageResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -98,15 +89,25 @@
     <Folder Include="EagleKitchen\styles\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EagleKitchen\img\henning.png" />
-    <EmbeddedResource Include="EagleKitchen\img\stillwater.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="EagleKitchen\CoreModel\Data\corvallis.txt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="EagleKitchen\img\handlesets\traditionalknob.png" />
+    <EmbeddedResource Include="EagleKitchen\img\handlesets\transitional.png" />
+    <EmbeddedResource Include="EagleKitchen\img\material\cherry.png" />
+    <EmbeddedResource Include="EagleKitchen\img\material\hickory.png" />
+    <EmbeddedResource Include="EagleKitchen\img\material\maple.png" />
+    <EmbeddedResource Include="EagleKitchen\img\material\oak.png" />
+    <EmbeddedResource Include="EagleKitchen\img\material\rusticmaple.png" />
+    <EmbeddedResource Include="EagleKitchen\img\material\SGCherryjpeg.png" />
+    <EmbeddedResource Include="EagleKitchen\img\everett.png" />
+    <EmbeddedResource Include="EagleKitchen\img\langdon.png" />
+    <EmbeddedResource Include="EagleKitchen\img\fillmore.png" />
+    <EmbeddedResource Include="EagleKitchen\img\stillwater.png" />
+    <EmbeddedResource Include="EagleKitchen\img\henning_color.png" />
+    <EmbeddedResource Include="EagleKitchen\img\tourainebirch.png" />
+    <EmbeddedResource Include="EagleKitchen\CoreModel\Data\linden3.txt" />
     <Content Include="EagleKitchen\henning.png" />
-    <EmbeddedResource Include="henning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

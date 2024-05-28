@@ -1,16 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using four.RequestHandlingUtils;
-using four.Utils;
 using Button = System.Windows.Controls.Button;
 
 
@@ -29,44 +22,7 @@ namespace four.EagleKitchen
         public EagleKitchenUi()
         {
             InitializeComponent();
-
-            CoreData.Text = CoreModel.Utils.EmbeddedData();
-
-            HenniBitmapImage = ImageUtilities.GetCabinetStyleImage("henning.png");
-
-
-            LoadDynamicButtons();
-
-            EagleConsoleTextBlock.Text = EagleConsole;
-
-        }
-
-        private void LoadDynamicButtons()
-        {
-
-            var (views, sheets) = CoreModel.Utils.ParseData();
-
-            foreach (var view in views)
-            {
-                var button = new Button
-                {
-                    Content = view,
-                };
-                button.Click += Update_View; // Assign click event
-                UIViews.Children.Add(button); // Add to Views StackPanel
-            }
-        }
-
-        private static void Update_View(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
-            Button button = sender as Button;
-            //MessageBox.Show($"Button clicked: {button.Content}");
-
-            UiData.GoToViewName = button.Content.ToString();
-            Main.AppsRequestHandler.RequestType = RequestType.UpdateView;
-            Main.MyExternalEvent.Raise();
-            System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default;
+            DataContext = this;
 
         }
 
@@ -81,6 +37,7 @@ namespace four.EagleKitchen
                 TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser
             };
         }
+
 
         private void ClickDeleteButton(object sender, RoutedEventArgs e)
         {
@@ -103,6 +60,18 @@ namespace four.EagleKitchen
 
 
         // :: SELECTIONS ::
+        private void ClickSelectionAllLowers(object sender, RoutedEventArgs e)
+        {
+            Main.AppsRequestHandler.RequestType = RequestType.MakeSelections;
+            EagleKitchen.ChosenCabinetConfiguration = CabinetConfiguration.AllLowers;
+            Main.MyExternalEvent.Raise();
+        }
+        private void ClickSelectionAllUppers(object sender, RoutedEventArgs e)
+        {
+            Main.AppsRequestHandler.RequestType = RequestType.MakeSelections;
+            EagleKitchen.ChosenCabinetConfiguration = CabinetConfiguration.AllUppers;
+            Main.MyExternalEvent.Raise();
+        }
         private void ClickSelectionAll1Door(object sender, RoutedEventArgs e)
         {
             Main.AppsRequestHandler.RequestType = RequestType.MakeSelections;
@@ -146,7 +115,7 @@ namespace four.EagleKitchen
             Main.MyExternalEvent.Raise();
         }
 
-        // :: Customizations ::
+        // :: Selections :: Instance Param Updates ::
         private void ClickCustomizeStyleHenning(object sender, RoutedEventArgs e)
         {
 
@@ -165,13 +134,11 @@ namespace four.EagleKitchen
         }
 
 
-        private void GoToPage2(object sender, RoutedEventArgs e)
+        // :: PRINTING :: //
+        private void ClickPrintDrawingSet(object sender, RoutedEventArgs e)
         {
-            throw new System.NotImplementedException();
-        }
-        private void GoToPage3(object sender, RoutedEventArgs e)
-        {
-            throw new System.NotImplementedException();
+            Main.AppsRequestHandler.RequestType = RequestType.PrintDrawings;
+            Main.MyExternalEvent.Raise();
         }
     }
 }

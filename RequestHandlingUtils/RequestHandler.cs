@@ -14,6 +14,7 @@ namespace four.RequestHandlingUtils
         UpdateView,
         MakeSelections,
         MakeCustomizations,
+        PrintDrawings,
 
         DevTest,
         None,
@@ -48,6 +49,9 @@ namespace four.RequestHandlingUtils
                     break;
                 case RequestType.MakeCustomizations:
                     EagleKitchen.EagleKitchen.SetStyle(app);
+                    break;
+                case RequestType.PrintDrawings:
+                    EagleKitchen.EagleKitchen.PrintDocument(app);
                     break;
             }
         }
