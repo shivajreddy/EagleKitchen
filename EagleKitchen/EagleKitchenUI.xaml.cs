@@ -116,23 +116,35 @@ namespace four.EagleKitchen
         }
 
         // :: Selections :: Instance Param Updates ::
-        private void ClickCustomizeStyleHenning(object sender, RoutedEventArgs e)
+        private void ClickCustomizeStyle(object sender, RoutedEventArgs e)
         {
-
             //System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
             Main.AppsRequestHandler.RequestType = RequestType.MakeCustomizations;
-            EagleKitchen.ChosenCabinetStyle = CabinetStyle.Style1;
-            Main.MyExternalEvent.Raise();
-            //System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default;
 
-        }
-        private void ClickCustomizeStyleMarquez(object sender, RoutedEventArgs e)
-        {
-            Main.AppsRequestHandler.RequestType = RequestType.MakeCustomizations;
-            EagleKitchen.ChosenCabinetStyle = CabinetStyle.Style2;
+            var button = sender as Button;
+            switch (button.Tag)
+            {
+                case "Style1":
+                    EagleKitchen.ChosenCabinetStyle = CabinetStyle.Style1Henning;
+                    break;
+                case "Style2":
+                    EagleKitchen.ChosenCabinetStyle = CabinetStyle.Style2TouraineBirch;
+                    break;
+                case "Style3":
+                    EagleKitchen.ChosenCabinetStyle = CabinetStyle.Style3StillWater;
+                    break;
+                case "Style4":
+                    EagleKitchen.ChosenCabinetStyle = CabinetStyle.Style4FillMore;
+                    break;
+                case "Style5":
+                    EagleKitchen.ChosenCabinetStyle = CabinetStyle.Style5Langdon;
+                    break;
+                case "Style6":
+                    EagleKitchen.ChosenCabinetStyle = CabinetStyle.Style6Everett;
+                    break;
+            }
             Main.MyExternalEvent.Raise();
         }
-
 
         // :: PRINTING :: //
         private void ClickPrintDrawingSet(object sender, RoutedEventArgs e)

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using four.RequestHandlingUtils;
 using Button = System.Windows.Controls.Button;
 using View = Autodesk.Revit.DB.View;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -30,12 +31,12 @@ namespace four.EagleKitchen
 
     public enum CabinetStyle
     {
-        Style1,
-        Style2,
-        //Style2,
-        //Style2,
-        //Style2,
-        //Style2,
+        Style1Henning,
+        Style2TouraineBirch,
+        Style3StillWater,
+        Style4FillMore,
+        Style5Langdon,
+        Style6Everett,
     }
 
 
@@ -52,6 +53,8 @@ namespace four.EagleKitchen
         // Data for DockUI to update, that can be used for writing fn's below
         public static CabinetConfiguration ChosenCabinetConfiguration { get; set; }
         public static CabinetStyle ChosenCabinetStyle { get; set; }
+
+        public static string UpdateCurrentViewToAnotherViewName {get; set; }
 
         // Events functions. These execute when that revit event/behaviour happens
         public static void OnSelectionChange(object sender, SelectionChangedEventArgs e)
@@ -82,8 +85,8 @@ namespace four.EagleKitchen
         public static void OnViewActivated(object sender, EventArgs e)
         {
             // Reset-UI
-            EagleKitchenDockUtils.EagleKitchenUi.EK24Views.Text = "";
-            EagleKitchenDockUtils.EagleKitchenUi.EK24Sheets.Text = "";
+            EagleKitchenDockUtils.EagleKitchenUi.ListOfEK24Views.Children.Clear();
+            EagleKitchenDockUtils.EagleKitchenUi.ListOfEK24Sheets.Children.Clear();
 
             // Grab the Document
             UIApplication app = sender as UIApplication;
@@ -92,23 +95,22 @@ namespace four.EagleKitchen
 
             FilteredElementCollector collector = new FilteredElementCollector(doc);
             //var views = collector.OfClass(typeof(View));
-            ICollection<Element> views = collector.OfClass(typeof(View)).WhereElementIsNotElementType().ToElements();
 
-            var sheets = collector.OfClass(typeof(ViewSheet));
+            // Get the views, sheets
+            var views = collector.OfClass(typeof(View)).WhereElementIsNotElementType().ToElements();
+            var sheets = collector.OfClass(typeof(ViewSheet)).ToElements();
 
-            IList<View> targetViews = new List<View>(); 
+            IList<View> targetViews = new List<View>();
             IList<ViewSheet> targetSheets = new List<ViewSheet>();
 
             foreach (View view in views)
             {
                 // Check if the view has the parameter and if it matches the target value
                 Parameter param = view.LookupParameter("EK24_view_sheet");
-                var x = view.Name;
-
                 if (param != null && param.StorageType == StorageType.Integer) // Yes/No parameters are stored as integers
                 {
                     // Check if the integer value corresponds to the boolean parameterValue (1 for true, 0 for false)
-                    if (param.AsInteger() == 1 ) targetViews.Add(view);
+                    if (param.AsInteger() == 1) targetViews.Add(view);
                 }
             }
 
@@ -119,51 +121,51 @@ namespace four.EagleKitchen
                 if (param != null && param.StorageType == StorageType.Integer) // Yes/No parameters are stored as integers
                 {
                     // Check if the integer value corresponds to the boolean parameterValue (1 for true, 0 for false)
-                    if (param.AsInteger() == 1 ) targetSheets.Add(viewSheet);
+                    if (param.AsInteger() == 1)
+                    {
+                        targetSheets.Add(viewSheet);
+
+                        var button_name = $"{viewSheet.SheetNumber} : {viewSheet.Name}";
+
+                        Button button = new Button
+                        {
+                            Content = button_name,
+                            Tag = viewSheet.Name,
+                            Width = 200,
+                            Height = 30,
+                            IsEnabled = true,
+                        };
+                        button.Click += Update_Current_View;
+
+                        EagleKitchenDockUtils.EagleKitchenUi.ListOfEK24Sheets.Children.Add(button);
+                    }
+
                 }
             }
 
-
             // Update-UI
             // add buttons
-            foreach (var view in targetViews) EagleKitchenDockUtils.EagleKitchenUi.EK24Views.Text += (view.Name + "\n");
-            foreach (var sheet in targetSheets) EagleKitchenDockUtils.EagleKitchenUi.EK24Sheets.Text += (sheet.Name + "\n");
+            //foreach (var view in targetViews) EagleKitchenDockUtils.EagleKitchenUi.EK24Views.Text += (view.Name + "\n");
+            //foreach (var sheet in targetSheets) EagleKitchenDockUtils.EagleKitchenUi..Text += (sheet.Name + "\n");
 
         }
 
-        public static void CreateViewButton()
+        private static void Update_Current_View(object sender, RoutedEventArgs e)
         {
-            // Create a new button
-            var newButton = new System.Windows.Controls.Button
-            {
-                Content = "Click Me",
-            };
+            Button button = sender as Button;
+            var view_name = button.Tag as string;
 
-            // Add an event handler (optional)
-            newButton.Click += NewButton_Click;
-            EagleKitchenDockUtils.EagleKitchenUi.UIPages.Children.Add(newButton);
+
+            Main.AppsRequestHandler.RequestType = RequestType.UpdateView;
+            //EagleKitchen.UpdateCurrentViewToAnotherViewName = view_name;
+            // Now moving all static UI related data to UiData.cs file
+            UiData.GoToViewName = view_name;
+
+            EagleKitchen.UpdateCurrentViewToAnotherViewName = view_name;
+            
+            Main.MyExternalEvent.Raise();
         }
 
-        //private static void Update_View(object sender, RoutedEventArgs e)
-        //{
-        //    System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor;
-        //    Button button = sender as Button;
-        //    //MessageBox.Show($"Button clicked: {button.Content}");
-
-        //    UiData.GoToViewName = button.Content.ToString();
-        //    Main.AppsRequestHandler.RequestType = RequestType.UpdateView;
-        //    Main.MyExternalEvent.Raise();
-        //    System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default;
-
-        //}
-
-
-
-        private static void NewButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Button clicked!");
-
-        }
 
         public static void UpdateDynamicUi(Selection currentSelection, Document doc)
         {
@@ -180,9 +182,9 @@ namespace four.EagleKitchen
 
             // Disable the UI
             EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeOptions.IsEnabled = false;
-            EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeOptions.ItemsSource= null;
+            EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeOptions.ItemsSource = null;
             EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.IsEnabled = false;
-            EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.ItemsSource= null;
+            EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.ItemsSource = null;
             EagleKitchenDockUtils.EagleKitchenUi.StyleInstanceParam.IsEnabled = false;
 
             foreach (var child in EagleKitchenDockUtils.EagleKitchenUi.StyleInstanceParam.Children)
@@ -284,7 +286,7 @@ namespace four.EagleKitchen
             }
 
             // Enable the UI
-            EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.ItemsSource= typeNames;
+            EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.ItemsSource = typeNames;
             EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.IsEnabled = true;
         }
 
@@ -317,7 +319,6 @@ namespace four.EagleKitchen
             return true;
         }
 
-
         public static void UpdateStyleUi(Selection currentSelection, Document doc)
         {
             var selectedIds = currentSelection.GetElementIds();
@@ -335,7 +336,7 @@ namespace four.EagleKitchen
 
         public static bool AllElementsAreCaseworkMillWork(ICollection<ElementId> allElementIds, Document doc)
         {
-            return allElementIds != null && allElementIds.Count != 0 && allElementIds.All(elementId => doc.GetElement(elementId).Category.Name == "Casework");
+            return doc != null && allElementIds != null && allElementIds.Count != 0 && allElementIds.All(elementId => doc.GetElement(elementId).Category.Name == "Casework");
         }
 
         public static bool AllElementsAreSameFamily(ICollection<ElementId> allemElementIds, Document doc)
@@ -349,7 +350,6 @@ namespace four.EagleKitchen
             }
             return true;
         }
-
 
         // Commands basically, which will get called through the EventHandler
         public static void Delete(UIApplication app)
@@ -365,7 +365,6 @@ namespace four.EagleKitchen
 
         public static void SetView(UIApplication app)
         {
-
             Document doc = app.ActiveUIDocument.Document;
 
             FilteredElementCollector coll = new FilteredElementCollector(doc);
@@ -390,8 +389,6 @@ namespace four.EagleKitchen
             }
 
             ViewSheet targetViewSheet = null;
-
-
         }
 
         public static void DevTest(UIApplication app)
@@ -463,7 +460,7 @@ namespace four.EagleKitchen
                     break;
                 default:
                     break;
-            } 
+            }
 
             Cursor.Current = Cursors.Default;
         }
@@ -500,11 +497,23 @@ namespace four.EagleKitchen
                         // Set a new value for the 'Mark' parameter
                         switch (ChosenCabinetStyle)
                         {
-                            case CabinetStyle.Style1:
+                            case CabinetStyle.Style1Henning:
                                 param.Set(1);
                                 break;
-                            case CabinetStyle.Style2:
+                            case CabinetStyle.Style2TouraineBirch:
                                 param.Set(2);
+                                break;
+                            case CabinetStyle.Style3StillWater:
+                                param.Set(3);
+                                break;
+                            case CabinetStyle.Style4FillMore:
+                                param.Set(4);
+                                break;
+                            case CabinetStyle.Style5Langdon:
+                                param.Set(5);
+                                break;
+                            case CabinetStyle.Style6Everett:
+                                param.Set(6);
                                 break;
 
                         }
