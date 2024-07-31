@@ -14,7 +14,7 @@ namespace four
         public static MainRequestHandler AppsRequestHandler { get; set; }
         public static ExternalEvent MyExternalEvent { get; set; }
 
-        private const string PluginTabName = "EagleKitchen";
+        private const string PluginTabName = "EK24";
         private const string PluginPanelName = "EagleKitchen";
         private static RibbonPanel _ribbonPanel;
         public Result OnStartup(UIControlledApplication application)

@@ -39,13 +39,6 @@ namespace four.EagleKitchen
         }
 
 
-        private void ClickDeleteButton(object sender, RoutedEventArgs e)
-        {
-            Main.AppsRequestHandler.RequestType = RequestType.Delete;
-            Main.MyExternalEvent.Raise();
-        }
-
-
         //private void ClickOpenView(object sender, RoutedEventArgs e)
         //{
         //    Main.AppsRequestHandler.RequestType = RequestType.UpdateView;
@@ -57,6 +50,9 @@ namespace four.EagleKitchen
             Main.AppsRequestHandler.RequestType = RequestType.DevTest;
             Main.MyExternalEvent.Raise();
         }
+
+
+
 
 
         // :: SELECTIONS ::
@@ -150,6 +146,99 @@ namespace four.EagleKitchen
         private void ClickPrintDrawingSet(object sender, RoutedEventArgs e)
         {
             Main.AppsRequestHandler.RequestType = RequestType.PrintDrawings;
+            Main.MyExternalEvent.Raise();
+        }
+        private void ExportQuantities_Click(object sender, RoutedEventArgs e)
+        {
+            Main.AppsRequestHandler.RequestType = RequestType.ExportQuantitiesToExcel;
+            Main.MyExternalEvent.Raise();
+        }
+
+        // Update Left Filler Strip Value based on the checkbox value
+        private void InstanceParamHasLeftFillerStrip_StateChanged(object sender, RoutedEventArgs e)
+        {
+            var checkbox = sender as System.Windows.Controls.CheckBox;
+            if (checkbox == null) return;
+
+            if (checkbox.IsChecked == true)
+            {
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamLeftFillerStripValue.IsEnabled = true;
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamLeftFillerStripSetButton.IsEnabled = true;
+
+                // Set the Event so that Event Handler knows to use the appropriate Event
+                UiData.HasLeftFillerStrip = true;
+                Main.AppsRequestHandler.RequestType = RequestType.UpdateHasLeftFillerStrip;
+                Main.MyExternalEvent.Raise();
+            }
+            else
+            {
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamLeftFillerStripValue.IsEnabled = false;
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamLeftFillerStripSetButton.IsEnabled = false;
+
+                UiData.HasLeftFillerStrip = false;
+                Main.AppsRequestHandler.RequestType = RequestType.UpdateHasLeftFillerStrip;
+                Main.MyExternalEvent.Raise();
+            }
+        }
+
+        // Update Right Filler Strip Value based on the checkbox value
+        private void InstanceParamHasRightFillerStrip_StateChanged(object sender, RoutedEventArgs e)
+        {
+            var checkbox = sender as System.Windows.Controls.CheckBox;
+            if (checkbox == null) return;
+
+            if (checkbox.IsChecked == true)
+            {
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamRightFillerStripValue.IsEnabled = true;
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamRightFillerStripSetButton.IsEnabled = true;
+
+                // Set the Event so that Event Handler knows to use the appropriate Event
+                Main.AppsRequestHandler.RequestType = RequestType.UpdateHasLeftFillerStrip;
+                Main.MyExternalEvent.Raise();
+
+                UiData.HasRightFillerStrip = true;
+                Main.AppsRequestHandler.RequestType = RequestType.UpdateHasRightFillerStrip;
+                Main.MyExternalEvent.Raise();
+            }
+            else
+            {
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamRightFillerStripValue.IsEnabled = false;
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamRightFillerStripSetButton.IsEnabled = false;
+
+                UiData.HasRightFillerStrip = false;
+                Main.AppsRequestHandler.RequestType = RequestType.UpdateHasRightFillerStrip;
+                Main.MyExternalEvent.Raise();
+            }
+        }
+
+        private void ButtonClick_SetLeftFillerStripWidth(object sender, RoutedEventArgs e)
+        {
+            var valueInString = EagleKitchenDockUtils.EagleKitchenUi.InstanceParamLeftFillerStripValue.Text;
+            UiData.LeftFillerStripValue = valueInString;
+
+            // Set the Event so that Event Handler knows to use the appropriate Event
+            Main.AppsRequestHandler.RequestType = RequestType.UpdateLeftFillerStripValue;
+            Main.MyExternalEvent.Raise();
+        }
+        private void ButtonClick_SetRightFillerStripWidth(object sender, RoutedEventArgs e)
+        {
+            var valueInString = EagleKitchenDockUtils.EagleKitchenUi.InstanceParamRightFillerStripValue.Text;
+            UiData.RightFillerStripValue = valueInString;
+
+            // Set the Event so that Event Handler knows to use the appropriate Event
+            Main.AppsRequestHandler.RequestType = RequestType.UpdateRightFillerStripValue;
+            Main.MyExternalEvent.Raise();
+        }
+
+        private void FamilyTypeSettingsUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            // chosen type
+            var chosenType = EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.SelectedItem;
+
+            UiData.chosenTypeValue = chosenType as string;
+
+            // Set the Event so that Event Handler knows to use the appropriate Event
+            Main.AppsRequestHandler.RequestType = RequestType.UpdateCabinetType;
             Main.MyExternalEvent.Raise();
         }
     }

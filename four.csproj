@@ -33,6 +33,10 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Office.Interop.Excel.15.0.4795.1001\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
@@ -68,9 +72,11 @@
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestHandlingUtils\RequestHandler.cs" />
+    <Compile Include="Utils\ExcelExporter.cs" />
     <Compile Include="Utils\ImageUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Readme.md" />
   </ItemGroup>
   <ItemGroup>
@@ -85,27 +91,26 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EagleKitchen\styles\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="EagleKitchen\CoreModel\Data\corvallis.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EagleKitchen\img\handlesets\traditionalknob.png" />
-    <EmbeddedResource Include="EagleKitchen\img\handlesets\transitional.png" />
-    <EmbeddedResource Include="EagleKitchen\img\material\cherry.png" />
-    <EmbeddedResource Include="EagleKitchen\img\material\hickory.png" />
-    <EmbeddedResource Include="EagleKitchen\img\material\maple.png" />
-    <EmbeddedResource Include="EagleKitchen\img\material\oak.png" />
-    <EmbeddedResource Include="EagleKitchen\img\material\rusticmaple.png" />
-    <EmbeddedResource Include="EagleKitchen\img\material\SGCherryjpeg.png" />
-    <EmbeddedResource Include="EagleKitchen\img\everett.png" />
-    <EmbeddedResource Include="EagleKitchen\img\langdon.png" />
-    <EmbeddedResource Include="EagleKitchen\img\fillmore.png" />
-    <EmbeddedResource Include="EagleKitchen\img\stillwater.png" />
-    <EmbeddedResource Include="EagleKitchen\img\henning_color.png" />
-    <EmbeddedResource Include="EagleKitchen\img\tourainebirch.png" />
+    <Content Include="EagleKitchen\henning_color.png" />
+    <Resource Include="Resources\material\SGCherryjpeg.png" />
+    <Resource Include="Resources\material\rusticmaple.png" />
+    <Resource Include="Resources\material\oak.png" />
+    <Resource Include="Resources\material\maple.png" />
+    <Resource Include="Resources\material\hickory.png" />
+    <Resource Include="Resources\material\cherry.png" />
+    <Resource Include="Resources\handlesets\transitional.png" />
+    <Resource Include="Resources\handlesets\traditionalknob.png" />
+    <Resource Include="Resources\styles\everett.png" />
+    <Resource Include="Resources\styles\langdon.png" />
+    <Resource Include="Resources\styles\fillmore.png" />
+    <Resource Include="Resources\styles\stillwater.png" />
+    <Resource Include="Resources\styles\henning_color.png" />
+    <Resource Include="Resources\styles\tourainebirch.png" />
     <EmbeddedResource Include="EagleKitchen\CoreModel\Data\linden3.txt" />
     <Content Include="EagleKitchen\henning.png" />
   </ItemGroup>

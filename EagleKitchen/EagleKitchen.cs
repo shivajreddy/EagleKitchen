@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using four.RequestHandlingUtils;
+using four.Utils;
 using Button = System.Windows.Controls.Button;
 using View = Autodesk.Revit.DB.View;
-using MessageBox = System.Windows.Forms.MessageBox;
 using SelectionChangedEventArgs = Autodesk.Revit.UI.Events.SelectionChangedEventArgs;
+using System.Collections.ObjectModel;
+using System.IO;
 
 
 namespace four.EagleKitchen
@@ -46,7 +47,6 @@ namespace four.EagleKitchen
     // revit-operations here, and then call from 'MainRequestHandler'
     public static class EagleKitchen
     {
-
         // TODO: make a wrapper-class for CabinetFamilyName-Type-Instance
         public static ISet<ElementId> ActiveSelectedElementIds { get; set; }
 
@@ -54,7 +54,49 @@ namespace four.EagleKitchen
         public static CabinetConfiguration ChosenCabinetConfiguration { get; set; }
         public static CabinetStyle ChosenCabinetStyle { get; set; }
 
-        public static string UpdateCurrentViewToAnotherViewName {get; set; }
+        public static string UpdateCurrentViewToAnotherViewName { get; set; }
+
+
+        // Method to append text to the console-TextBox
+        public static void AppendLog(string log)
+        {
+            EagleKitchenDockUtils.EagleKitchenUi.ConsoleTextBox.AppendText(log + "\n");
+            EagleKitchenDockUtils.EagleKitchenUi.ConsoleTextBox.ScrollToEnd(); // Scroll to the end to show the latest log
+        }
+
+        public static void ExportQuantitiesToExcel(UIApplication app)
+        {
+            Document doc = app.ActiveUIDocument.Document;
+
+            // Collect all casework and millwork family instances
+            var collector = new FilteredElementCollector(doc)
+                .OfClass(typeof(FamilyInstance))
+                .OfCategory(BuiltInCategory.OST_Casework);
+            var data = new List<(string FamilyName, string TypeName)>();
+
+            foreach (FamilyInstance instance in collector)
+            {
+                var familyName = instance.Symbol.Family.Name;
+                var typeName = instance.Name;
+                data.Add((familyName, typeName));
+            }
+
+            // Export to Excel
+            //var filePath = @"C:\Users\sreddy\Desktop\test\LindenIII_Purchase_List.xlsx";
+            var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            var filePath = Path.Combine(desktopPath, "LindenIII_Purchase_List.xlsx");
+
+            AppendLog("Excel_Export savedto: " + filePath);
+
+            var excelExporter = new ExcelExporter(filePath);
+            excelExporter.ExportToExcel(data);
+        }
+
+        // This is a test function to check if the plugin is working
+        public static void DevTest(UIApplication app)
+        {
+            TaskDialog.Show("test", "test101");
+        }
 
         // Events functions. These execute when that revit event/behaviour happens
         public static void OnSelectionChange(object sender, SelectionChangedEventArgs e)
@@ -69,17 +111,9 @@ namespace four.EagleKitchen
             UIApplication app = sender as UIApplication;
             UIDocument uiDoc = app.ActiveUIDocument;
             Document doc = app.ActiveUIDocument.Document;
-            //var doc = e.GetDocument();    // could've used this directly if all we want is Document
 
             Selection currentSelection = uiDoc.Selection;
-
             UpdateDynamicUi(currentSelection, doc);
-
-            //UpdateTypeDropDown(currentSelection, doc);
-
-            //if (e.GetSelectedElements().Count == 0) return;
-            //ActiveSelectedElementIds = e.GetSelectedElements();
-            //EagleKitchenDockUtils.EagleKitchenUi.UIActiveSelections.Text = ActiveSelectedElementIds.ToString();
         }
 
         public static void OnViewActivated(object sender, EventArgs e)
@@ -89,65 +123,68 @@ namespace four.EagleKitchen
             EagleKitchenDockUtils.EagleKitchenUi.ListOfEK24Sheets.Children.Clear();
 
             // Grab the Document
-            UIApplication app = sender as UIApplication;
-            UIDocument uiDoc = app.ActiveUIDocument;
-            Document doc = app.ActiveUIDocument.Document;
+            var app = sender as UIApplication;
+            var uiDoc = app.ActiveUIDocument;
+            var doc = app.ActiveUIDocument.Document;
 
-            FilteredElementCollector collector = new FilteredElementCollector(doc);
-            //var views = collector.OfClass(typeof(View));
+            var collector = new FilteredElementCollector(doc);
+            var allViews = collector.OfClass(typeof(View)).ToElements();
 
-            // Get the views, sheets
-            var views = collector.OfClass(typeof(View)).WhereElementIsNotElementType().ToElements();
-            var sheets = collector.OfClass(typeof(ViewSheet)).ToElements();
 
-            IList<View> targetViews = new List<View>();
-            IList<ViewSheet> targetSheets = new List<ViewSheet>();
-
-            foreach (View view in views)
+            foreach (var view in allViews)
             {
                 // Check if the view has the parameter and if it matches the target value
                 Parameter param = view.LookupParameter("EK24_view_sheet");
-                if (param != null && param.StorageType == StorageType.Integer) // Yes/No parameters are stored as integers
+
+                // Yes/No parameters are stored as integers
+                // Check if the integer value corresponds to the boolean parameterValue (1 for true, 0 for false)
+                if (param is not { StorageType: StorageType.Integer } || param.AsInteger() != 1) continue;
+
+                var button = new Button
                 {
-                    // Check if the integer value corresponds to the boolean parameterValue (1 for true, 0 for false)
-                    if (param.AsInteger() == 1) targetViews.Add(view);
+                    Content = "",
+                    Tag = view.Name,
+                    Height = 30,
+                    IsEnabled = true,
+                    Style = EagleKitchenDockUtils.EagleKitchenUi.FindResource("GoToViewButtonStyle") as Style
+
+                };
+                button.Click += Update_Current_View;
+
+                // Update-UI :: add buttons
+                // This is a view sheet -> so a sheet in the project browser
+                if (view.GetType() == typeof(ViewSheet))
+                {
+                    var viewSheet = view as ViewSheet;
+                    button.Content = $"{viewSheet.SheetNumber} : {viewSheet.Name}";
+                    EagleKitchenDockUtils.EagleKitchenUi.ListOfEK24Sheets.Children.Add(button);
+                }
+                else
+                {
+                    button.Content = $"{view.Name}";
+                    EagleKitchenDockUtils.EagleKitchenUi.ListOfEK24Views.Children.Add(button);
                 }
             }
+        }
 
-            foreach (ViewSheet viewSheet in sheets)
-            {
-                // Check if the view has the parameter and if it matches the target value
-                Parameter param = viewSheet.LookupParameter("EK24_view_sheet");
-                if (param != null && param.StorageType == StorageType.Integer) // Yes/No parameters are stored as integers
-                {
-                    // Check if the integer value corresponds to the boolean parameterValue (1 for true, 0 for false)
-                    if (param.AsInteger() == 1)
-                    {
-                        targetSheets.Add(viewSheet);
+        public static void UpdateDynamicUi(Selection currentSelection, Document doc)
+        {
+            // :: Enable the UI ::
+            // Enable the dropdown boxes
+            UpdateFamilyTypeDropDownUi(currentSelection, doc);
+            UpdateTypeDropDownUi(currentSelection, doc);
 
-                        var button_name = $"{viewSheet.SheetNumber} : {viewSheet.Name}";
+            //Enable the Common Settings
+            UpdateCommonSettingsUi(currentSelection, doc);
 
-                        Button button = new Button
-                        {
-                            Content = button_name,
-                            Tag = viewSheet.Name,
-                            Width = 200,
-                            Height = 30,
-                            IsEnabled = true,
-                        };
-                        button.Click += Update_Current_View;
+            // TODO: below two functions to be implemented
+            // Enable the Single Door Settings
+            UpdateSingleDoorSettingsUi(currentSelection, doc);
+            // Enable the Upper Cabinet Settings
+            UpdateUpperDoorSettingsUi(currentSelection, doc);
 
-                        EagleKitchenDockUtils.EagleKitchenUi.ListOfEK24Sheets.Children.Add(button);
-                    }
-
-                }
-            }
-
-            // Update-UI
-            // add buttons
-            //foreach (var view in targetViews) EagleKitchenDockUtils.EagleKitchenUi.EK24Views.Text += (view.Name + "\n");
-            //foreach (var sheet in targetSheets) EagleKitchenDockUtils.EagleKitchenUi..Text += (sheet.Name + "\n");
-
+            // Enable the Style tab, Finish tab, Handles tab under 'Selections' tab
+            UpdateStyleFinishHandlesUi(currentSelection, doc);
         }
 
         private static void Update_Current_View(object sender, RoutedEventArgs e)
@@ -162,53 +199,120 @@ namespace four.EagleKitchen
             UiData.GoToViewName = view_name;
 
             EagleKitchen.UpdateCurrentViewToAnotherViewName = view_name;
-            
+
             Main.MyExternalEvent.Raise();
         }
 
-
-        public static void UpdateDynamicUi(Selection currentSelection, Document doc)
+        public static void UpdateCommonSettingsUi(Selection currentSelection, Document doc)
         {
-            // Reset the UI-Text first
-            //EagleKitchenDockUtils.EagleKitchenUi.TotalSelections.Text = "";
+            //EagleKitchenDockUtils.EagleKitchenUi.InstanceParamIsButt.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamHasLeftFillerStrip.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamHasLeftFillerStrip.IsChecked = false;
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamLeftFillerStripValue.Text = "";
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamLeftFillerStripValue.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamLeftFillerStripSetButton.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamHasRightFillerStrip.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamHasRightFillerStrip.IsChecked = false;
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamRightFillerStripValue.Text = "";
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamRightFillerStripValue.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamRightFillerStripSetButton.IsEnabled = false;
 
-            //var selectedIds = currentSelection.GetElementIds();
+            var selectedIds = currentSelection.GetElementIds();
+
             // If not all Objects are not CaseWork category then Exit.
-            //if (!AllElementsAreCaseworkMillWork(selectedIds, doc)) return;
+            if (!AllElementsAreCaseworkMillWork(selectedIds, doc)) return;
 
+            // If not all chosen are not FamilyInstances then Exit.
+            if (!AllElementsAreFamilyInstances(selectedIds, doc)) return;
 
-            //string totalSelections = currentSelection.GetElementIds().Count.ToString();
-            //EagleKitchenDockUtils.EagleKitchenUi.TotalSelections.Text = totalSelections;
+            // if they don't have filler strip params, do not enable these buttons
+            if (!AllFamilyInstancesHaveTargetParam(selectedIds, doc, "Left_FillerStrip_Width")) return;
+            if (!AllFamilyInstancesHaveTargetParam(selectedIds, doc, "Right_FillerStrip_Width")) return;
 
-            // Disable the UI
-            EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeOptions.IsEnabled = false;
-            EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeOptions.ItemsSource = null;
-            EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.IsEnabled = false;
-            EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.ItemsSource = null;
-            EagleKitchenDockUtils.EagleKitchenUi.StyleInstanceParam.IsEnabled = false;
+            // Enable the Checkboxes
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamHasLeftFillerStrip.IsEnabled = true;
+            EagleKitchenDockUtils.EagleKitchenUi.InstanceParamHasRightFillerStrip.IsEnabled = true;
 
-            foreach (var child in EagleKitchenDockUtils.EagleKitchenUi.StyleInstanceParam.Children)
+            // show current values for filler strips
+            // if multiple items are selected show <varies>
+            if (selectedIds.Count > 1)
             {
-                if (child is Button button)
+                // show varies if the values of the selected items are different
+                //var allLeftParamValues = new List<string>();
+                var allLeftParamValues = new HashSet<string>();
+                var allRightParamValues = new List<string>();
+                foreach (var elementId in selectedIds)
                 {
-                    button.IsEnabled = false;
+                    var inst = doc.GetElement(elementId) as FamilyInstance;
+                    var leftVal = inst.LookupParameter("Left_FillerStrip_Width")?.AsValueString();
+                    var rightVal = inst.LookupParameter("Right_FillerStrip_Width")?.AsValueString();
+                    if (!allLeftParamValues.Contains(leftVal)) break;
+                    if (!allRightParamValues.Contains(rightVal)) break;
+                    allLeftParamValues.Add(leftVal);
+                    allRightParamValues.Add(rightVal);
                 }
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamLeftFillerStripValue.Text = "<varies>";
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamRightFillerStripValue.Text = "<varies>";
+            }
+            else
+            {
+                var firstId = selectedIds.First();
+                var firstElement = doc.GetElement(firstId) as FamilyInstance;
+
+                // Get the current values of the instance params
+                var leftFillerStripParam = firstElement.LookupParameter("Left_FillerStrip_Width");
+                var rightFillerStripParam = firstElement.LookupParameter("Right_FillerStrip_Width");
+
+                var hasLeftFillerStripParam = firstElement.LookupParameter("Left_FillerStrip");
+                var hasRightFillerStripParam = firstElement.LookupParameter("Right_FillerStrip");
+
+                if (hasLeftFillerStripParam != null)
+                {
+                    var x = hasLeftFillerStripParam.AsInteger();
+                    EagleKitchenDockUtils.EagleKitchenUi.InstanceParamHasLeftFillerStrip.IsChecked = hasLeftFillerStripParam.AsInteger() == 1;
+                }
+                if (hasRightFillerStripParam != null)
+                {
+                    EagleKitchenDockUtils.EagleKitchenUi.InstanceParamHasRightFillerStrip.IsChecked = hasRightFillerStripParam.AsInteger() == 1;
+                }
+
+
+                var leftParamAsValueString = leftFillerStripParam.AsValueString();
+                var rightParamAsValueString = rightFillerStripParam.AsValueString();
+
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamLeftFillerStripValue.Text = ExtractMeasurement(leftParamAsValueString);
+                EagleKitchenDockUtils.EagleKitchenUi.InstanceParamRightFillerStripValue.Text = ExtractMeasurement(rightParamAsValueString);
             }
 
-
-            // Enable the UI
-            UpdateFamilyTypeDropDown(currentSelection, doc);
-            UpdateTypeDropDown(currentSelection, doc);
-            UpdateStyleUi(currentSelection, doc);
-            //UpdateFinishUi(currentSelection, doc);
-            //UpdateHandlesUi(currentSelection, doc);
-
-            // show the family(or)type names of selection, only if the selected are cabinets,
-            // if they are not, then disable the text-block
-            // Filter our the cabinet families
         }
 
-        public class CaseworkItem
+        static string ExtractMeasurement(string input)
+        {
+            // Find the position of the hyphen
+            int hyphenIndex = input.IndexOf('-');
+            if (hyphenIndex == -1)
+            {
+                return string.Empty; // Return empty if no hyphen is found
+            }
+
+            // Extract the substring after the hyphen and trim whitespace and quotes
+            string result = input.Substring(hyphenIndex + 1).Trim(' ', '\"');
+
+            return result;
+        }
+
+        // TODO: implement these two functions
+        public static void UpdateSingleDoorSettingsUi(Selection currentSelection, Document doc)
+        {
+            EagleKitchenDockUtils.EagleKitchenUi.SingleDoorSettings.IsEnabled = false;
+        }
+
+        public static void UpdateUpperDoorSettingsUi(Selection currentSelection, Document doc)
+        {
+            EagleKitchenDockUtils.EagleKitchenUi.UpperCabinetSettings.IsEnabled = false;
+        }
+
+        public class EagleCabinetFamilyInstance
         {
             public string FamilyName { get; set; }
             public string TypeName { get; set; }
@@ -218,24 +322,32 @@ namespace four.EagleKitchen
             }
         }
 
-        public static void UpdateFamilyTypeDropDown(Selection currentSelection, Document doc)
+        public static void UpdateFamilyTypeDropDownUi(Selection currentSelection, Document doc)
         {
+            EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeOptions.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeOptions.ItemsSource = null;
+            EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeSettingsUpdate.IsEnabled = false;
+
             var selectedIds = currentSelection.GetElementIds();
             // If not all Objects are not CaseWork category then Exit.
             if (!AllElementsAreCaseworkMillWork(selectedIds, doc)) return;
 
-            List<CaseworkItem> caseworkItems = new List<CaseworkItem>();
-            //var caseworkItems = new ObservableCollection<CaseworkItem>();
+            // Get only the cabinet families from the selected 'case-work' elements
+            var caseworkItems = new List<EagleCabinetFamilyInstance>();
 
             // Collect all family symbols in the document
-            FilteredElementCollector collector = new FilteredElementCollector(doc);
-            IList<Element> familySymbols = collector.OfClass(typeof(FamilySymbol))
+            var collector = new FilteredElementCollector(doc);
+            var familySymbols = collector.OfClass(typeof(FamilySymbol))
                 .OfCategory(BuiltInCategory.OST_Casework)
                 .ToElements();
             foreach (FamilySymbol symbol in familySymbols)
             {
-                // Each symbol is a family type in the Casework category
-                CaseworkItem item = new CaseworkItem
+                // only add the family type if it is Eagle Cabinet family
+                if (!symbol.Family.Name.StartsWith("Base_Cabinet") &&
+                    !symbol.Family.Name.StartsWith("Wall_Cabinet")) continue;
+
+                var item = new EagleCabinetFamilyInstance
                 {
                     TypeName = symbol.Name,
                     FamilyName = symbol.Family.Name
@@ -246,10 +358,15 @@ namespace four.EagleKitchen
             // Enable the UI
             EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeOptions.ItemsSource = caseworkItems;
             EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeOptions.IsEnabled = true;
+            //EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.IsEnabled = true;
         }
 
-        public static void UpdateTypeDropDown(Selection currentSelection, Document doc)
+        public static void UpdateTypeDropDownUi(Selection currentSelection, Document doc)
         {
+
+            EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.ItemsSource = null;
+
             // Make sure that all the selected elements are of the same family
             var selectedIds = currentSelection.GetElementIds();
             // If not all Objects are not CaseWork category then Exit.
@@ -288,6 +405,9 @@ namespace four.EagleKitchen
             // Enable the UI
             EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.ItemsSource = typeNames;
             EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.IsEnabled = true;
+            // show the current active size
+            //EagleKitchenDockUtils.EagleKitchenUi.TypeOptions.setle
+            EagleKitchenDockUtils.EagleKitchenUi.FamilyTypeSettingsUpdate.IsEnabled = true;
         }
 
         private static bool AllElementsAreFamilyInstances(ICollection<ElementId> ids, Document doc)
@@ -303,14 +423,14 @@ namespace four.EagleKitchen
             return true;
         }
 
-        private static bool AllFamilyInstancesHaveCaseworkStyleParam(ICollection<ElementId> ids, Document doc)
+        private static bool AllFamilyInstancesHaveTargetParam(ICollection<ElementId> ids, Document doc, string paramName)
         {
             foreach (var id in ids)
             {
                 var familyInstance = doc.GetElement(id) as FamilyInstance;
                 if (familyInstance == null) continue;
 
-                var param = familyInstance.LookupParameter("Casework_Style");
+                var param = familyInstance.LookupParameter(paramName);
                 if (param == null)
                 {
                     return false;
@@ -319,8 +439,12 @@ namespace four.EagleKitchen
             return true;
         }
 
-        public static void UpdateStyleUi(Selection currentSelection, Document doc)
+        public static void UpdateStyleFinishHandlesUi(Selection currentSelection, Document doc)
         {
+            EagleKitchenDockUtils.EagleKitchenUi.StyleInstanceParam.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.MaterialInstanceParam.IsEnabled = false;
+            EagleKitchenDockUtils.EagleKitchenUi.HandleInstanceParam.IsEnabled = false;
+
             var selectedIds = currentSelection.GetElementIds();
             // If not all Objects are not CaseWork category then Exit.
             if (!AllElementsAreCaseworkMillWork(selectedIds, doc)) return;
@@ -328,10 +452,11 @@ namespace four.EagleKitchen
             // make sure all family instances have the instance param 'Casework_Style' in them
             // if they don't do not enable these buttons
             if (!AllElementsAreFamilyInstances(selectedIds, doc)) return;
-            if (!AllFamilyInstancesHaveCaseworkStyleParam(selectedIds, doc)) return;
+            if (!AllFamilyInstancesHaveTargetParam(selectedIds, doc, "Casework_Style")) return;
 
             EagleKitchenDockUtils.EagleKitchenUi.StyleInstanceParam.IsEnabled = true;
-
+            EagleKitchenDockUtils.EagleKitchenUi.MaterialInstanceParam.IsEnabled = true;
+            EagleKitchenDockUtils.EagleKitchenUi.HandleInstanceParam.IsEnabled = true;
         }
 
         public static bool AllElementsAreCaseworkMillWork(ICollection<ElementId> allElementIds, Document doc)
@@ -339,28 +464,16 @@ namespace four.EagleKitchen
             return doc != null && allElementIds != null && allElementIds.Count != 0 && allElementIds.All(elementId => doc.GetElement(elementId).Category.Name == "Casework");
         }
 
-        public static bool AllElementsAreSameFamily(ICollection<ElementId> allemElementIds, Document doc)
+        public static bool AllElementsAreSameFamily(ICollection<ElementId> allElementIds, Document doc)
         {
 
-            var targetFamilyName = (doc.GetElement(allemElementIds.First()) as FamilyInstance)?.Symbol.FamilyName;
-            foreach (var elementId in allemElementIds)
+            var targetFamilyName = (doc.GetElement(allElementIds.First()) as FamilyInstance)?.Symbol.FamilyName;
+            foreach (var elementId in allElementIds)
             {
                 var inst = doc.GetElement(elementId) as FamilyInstance;
                 if (inst.Symbol.Family.Name != targetFamilyName) return false;
             }
             return true;
-        }
-
-        // Commands basically, which will get called through the EventHandler
-        public static void Delete(UIApplication app)
-        {
-            var doc = app.ActiveUIDocument.Document;
-            using (var trans = new Transaction(doc, "EK: Delete Items"))
-            {
-                trans.Start();
-                doc.Delete(ActiveSelectedElementIds);
-                trans.Commit();
-            }
         }
 
         public static void SetView(UIApplication app)
@@ -391,12 +504,6 @@ namespace four.EagleKitchen
             ViewSheet targetViewSheet = null;
         }
 
-        public static void DevTest(UIApplication app)
-        {
-            Document doc = app.ActiveUIDocument.Document;
-            TaskDialog.Show("Dev", "Testing success");
-        }
-
         public static void SelectElements(UIApplication app)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -404,10 +511,12 @@ namespace four.EagleKitchen
             var uiDoc = app.ActiveUIDocument;
             var doc = uiDoc.Document;
 
+            // Create an ElementOwnerView filter with id of active view
+            ElementOwnerViewFilter elementOwnerViewFilter = new ElementOwnerViewFilter(doc.ActiveView.Id);
+
             // Filter for all the instances of 'ChosenCabinetConfiguration'
-            FilteredElementCollector coll = new FilteredElementCollector(doc);
-            IList<Element> familyInstances =
-                coll.OfClass(typeof(FamilyInstance)).WhereElementIsNotElementType().ToElements();
+            FilteredElementCollector coll = new FilteredElementCollector(doc, doc.ActiveView.Id);
+            IList<Element> familyInstances = coll.OfClass(typeof(FamilyInstance)).WhereElementIsNotElementType().ToElements();
 
             ICollection<ElementId> filteredElementIds;
 
@@ -458,10 +567,189 @@ namespace four.EagleKitchen
                         .ToList();
                     uiDoc.Selection.SetElementIds(filteredElementIds);
                     break;
-                default:
+                case CabinetConfiguration.All2Doors:
+                    filteredElementIds = familyInstances
+                        .Where(x => (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_TwoDoor" ||
+                                           (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_TwoDoors+OneDrawer-V3"
+                                        )
+                        .Select(x => x.Id)
+                        .ToList();
+                    uiDoc.Selection.SetElementIds(filteredElementIds);
+                    break;
+                case CabinetConfiguration.Only2Doors:
+                    filteredElementIds = familyInstances
+                        .Where(x => (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_TwoDoor")
+                        .Select(x => x.Id)
+                        .ToList();
+                    uiDoc.Selection.SetElementIds(filteredElementIds);
+                    break;
+                case CabinetConfiguration.Only2Door1Drawer:
+                    filteredElementIds = familyInstances
+                        .Where(x => (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_TwoDoors+OneDrawer-V3")
+                        .Select(x => x.Id)
+                        .ToList();
+                    uiDoc.Selection.SetElementIds(filteredElementIds);
+                    break;
+                case CabinetConfiguration.Only2Door2Drawers:
+                    filteredElementIds = familyInstances
+                        .Where(x => (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_TwoDoors+TwoDrawer")
+                        .Select(x => x.Id)
+                        .ToList();
+                    uiDoc.Selection.SetElementIds(filteredElementIds);
                     break;
             }
 
+            Cursor.Current = Cursors.Default;
+        }
+
+        public static void UpdateCabinetFamilyAndType(UIApplication app) { }
+
+        public static void UpdateCabinetType(UIApplication app)
+        {
+            UIDocument uiDoc = app.ActiveUIDocument;
+            Document doc = uiDoc.Document;
+
+            // Get the current selection
+            ICollection<ElementId> selectedIds = uiDoc.Selection.GetElementIds();
+
+            if (selectedIds.Count == 0) return;
+
+            // Start a transaction to modify document
+            Cursor.Current = Cursors.WaitCursor;
+            using (Transaction trans = new Transaction(doc, "EK: Update Cabinet Type"))
+            {
+                trans.Start();
+                var val = UiData.HasLeftFillerStrip;
+
+                var instance = doc.GetElement(selectedIds.First()) as FamilyInstance;
+
+                // change the type of the familyinstance
+                string newTypeName = UiData.chosenTypeValue;
+
+                FamilySymbol newFamilySymbol = new FilteredElementCollector(doc)
+                    .OfClass(typeof(FamilySymbol))
+                    .OfType<FamilySymbol>()
+                    .FirstOrDefault(s => s.FamilyName == instance.Symbol.Family.Name && s.Name == newTypeName);
+
+                // Ensure the new family symbol is loaded into the project and activated
+                if (!newFamilySymbol.IsActive)
+                {
+                    newFamilySymbol.Activate();
+                    doc.Regenerate();
+                }
+
+                // Set the new symbol to the family instance
+                instance.Symbol = newFamilySymbol;
+
+
+                trans.Commit();
+            }
+            Cursor.Current = Cursors.Default;
+
+        }
+
+        public static void UpdateHasLeftFillerStrip(UIApplication app)
+        {
+            UIDocument uiDoc = app.ActiveUIDocument;
+            Document doc = uiDoc.Document;
+
+            // Get the current selection
+            ICollection<ElementId> selectedIds = uiDoc.Selection.GetElementIds();
+
+            if (selectedIds.Count == 0) return;
+
+            // Start a transaction to modify document
+            Cursor.Current = Cursors.WaitCursor;
+            using (Transaction trans = new Transaction(doc, "EK: Modify Left Filler Strip"))
+            {
+                trans.Start();
+                var val = UiData.HasLeftFillerStrip;
+
+                var instance = doc.GetElement(selectedIds.First()) as FamilyInstance;
+                var param = instance.LookupParameter("Left_FillerStrip");
+                var x = param.AsInteger();
+                param.Set(param.AsInteger());
+
+                trans.Commit();
+            }
+            Cursor.Current = Cursors.Default;
+
+        }
+
+        public static void UpdateHasRightFillerStrip(UIApplication app)
+        {
+            UIDocument uiDoc = app.ActiveUIDocument;
+            Document doc = uiDoc.Document;
+
+            // Get the current selection
+            ICollection<ElementId> selectedIds = uiDoc.Selection.GetElementIds();
+
+            if (selectedIds.Count == 0) return;
+
+            // Start a transaction to modify document
+            Cursor.Current = Cursors.WaitCursor;
+            using (Transaction trans = new Transaction(doc, "EK: Modify Left Filler Strip"))
+            {
+                trans.Start();
+                var val = UiData.HasLeftFillerStrip;
+
+                var instance = doc.GetElement(selectedIds.First()) as FamilyInstance;
+                var param = instance.LookupParameter("Right_FillerStrip");
+                param.Set(param.AsInteger());
+
+                trans.Commit();
+            }
+            Cursor.Current = Cursors.Default;
+
+
+
+        }
+
+        public static void UpdateLeftFillerStripValue(UIApplication app)
+        {
+            UIDocument uiDoc = app.ActiveUIDocument;
+            Document doc = uiDoc.Document;
+
+            // Get the current selection
+            ICollection<ElementId> selectedIds = uiDoc.Selection.GetElementIds();
+
+            if (selectedIds.Count == 0) return;
+
+            // Start a transaction to modify document
+            Cursor.Current = Cursors.WaitCursor;
+            using (Transaction trans = new Transaction(doc, "EK: Modify Left Filler Strip"))
+            {
+                trans.Start();
+                var val = UiData.LeftFillerStripValue;
+                var finalVal = double.Parse(val) / 12;
+
+                var instance = doc.GetElement(selectedIds.First()) as FamilyInstance;
+                var param = instance.LookupParameter("Left_FillerStrip_Width");
+                param.Set(finalVal);
+
+                trans.Commit();
+            }
+            Cursor.Current = Cursors.Default;
+        }
+
+        public static void UpdateRightFillerStripValue(UIApplication app)
+        {
+            UIDocument uiDoc = app.ActiveUIDocument;
+            Document doc = uiDoc.Document;
+
+            // Get the current selection
+            ICollection<ElementId> selectedIds = uiDoc.Selection.GetElementIds();
+
+            if (selectedIds.Count == 0) return;
+
+            // Start a transaction to modify document
+            Cursor.Current = Cursors.WaitCursor;
+            using (Transaction trans = new Transaction(doc, "EK: Modify Right Filler Strip"))
+            {
+                trans.Start();
+                var val = UiData.RightFillerStripValue;
+                trans.Commit();
+            }
             Cursor.Current = Cursors.Default;
         }
 
@@ -472,16 +760,13 @@ namespace four.EagleKitchen
             UIDocument uiDoc = app.ActiveUIDocument;
             Document doc = uiDoc.Document;
 
-            Cursor.Current = Cursors.WaitCursor;
-
-            //Thread.Sleep(10000);
-
             // Get the current selection
             ICollection<ElementId> selectedIds = uiDoc.Selection.GetElementIds();
 
             if (selectedIds.Count == 0) return;
 
             // Start a transaction to modify document
+            Cursor.Current = Cursors.WaitCursor;
             using (Transaction trans = new Transaction(doc, "EK: Update Styles"))
             {
                 trans.Start();
@@ -592,6 +877,7 @@ namespace four.EagleKitchen
 
         }
 
-
     }
 }
+
+

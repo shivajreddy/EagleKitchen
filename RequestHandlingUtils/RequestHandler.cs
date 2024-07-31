@@ -10,18 +10,30 @@ namespace four.RequestHandlingUtils
     // RequestType ppty on that MainRequestHandler instance, before calling the Execute method.
     public enum RequestType
     {
-        Delete,
         UpdateView,
+
+        // configuration settings
+        UpdateCabinetFamilyAndType,
+        UpdateCabinetType,
+
+        // Common Settings
+        UpdateHasLeftFillerStrip,
+        UpdateHasRightFillerStrip,
+        UpdateLeftFillerStripValue,
+        UpdateRightFillerStripValue,
+
         MakeSelections,
         MakeCustomizations,
+
         PrintDrawings,
+        ExportQuantitiesToExcel,
 
         DevTest,
         None,
     }
 
 
-    public class MainRequestHandler: IExternalEventHandler
+    public class MainRequestHandler : IExternalEventHandler
     {
 
         // Ui should set this RequestType ppty before calling the Execute method
@@ -32,26 +44,51 @@ namespace four.RequestHandlingUtils
             // Execute the fn based on the type of request
             switch (RequestType)
             {
-                case RequestType.None:
-                    break;
-                case RequestType.Delete:
-                    // Call the that events method handler
-                    EagleKitchen.EagleKitchen.Delete(app);
-                    break;
                 case RequestType.UpdateView:
                     EagleKitchen.EagleKitchen.SetView(app);
                     break;
+
+                // Configuration settings
+                case RequestType.UpdateCabinetFamilyAndType:
+                    EagleKitchen.EagleKitchen.UpdateCabinetFamilyAndType(app);
+                    break;
+                case RequestType.UpdateCabinetType:
+                    EagleKitchen.EagleKitchen.UpdateCabinetType(app);
+                    break;
+
+                // Common settings
+                case RequestType.UpdateHasLeftFillerStrip:
+                    EagleKitchen.EagleKitchen.UpdateHasLeftFillerStrip(app);
+                    break;
+                case RequestType.UpdateHasRightFillerStrip:
+                    EagleKitchen.EagleKitchen.UpdateHasRightFillerStrip(app);
+                    break;
+                case RequestType.UpdateLeftFillerStripValue:
+                    EagleKitchen.EagleKitchen.UpdateLeftFillerStripValue(app);
+                    break;
+                case RequestType.UpdateRightFillerStripValue:
+                    EagleKitchen.EagleKitchen.UpdateRightFillerStripValue(app);
+                    break;
+
                 case RequestType.MakeSelections:
                     EagleKitchen.EagleKitchen.SelectElements(app);
-                    break;
-                case RequestType.DevTest:
-                    EagleKitchen.EagleKitchen.DevTest(app);
                     break;
                 case RequestType.MakeCustomizations:
                     EagleKitchen.EagleKitchen.SetStyle(app);
                     break;
+
+                // Export data
                 case RequestType.PrintDrawings:
                     EagleKitchen.EagleKitchen.PrintDocument(app);
+                    break;
+                case RequestType.ExportQuantitiesToExcel:
+                    EagleKitchen.EagleKitchen.ExportQuantitiesToExcel(app);
+                    break;
+
+                case RequestType.DevTest:
+                    EagleKitchen.EagleKitchen.DevTest(app);
+                    break;
+                case RequestType.None:
                     break;
             }
         }
