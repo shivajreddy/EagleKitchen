@@ -1,10 +1,10 @@
-﻿using System.Reflection;
-using Autodesk.Revit.Attributes;
+﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using four.Utils;
+using EK24.Utils;
+using System.Reflection;
 
-namespace four.EagleKitchen
+namespace EK24.EagleKitchen
 {
 
     [Transaction(TransactionMode.Manual)]
@@ -26,8 +26,8 @@ namespace four.EagleKitchen
             const string pushButtonTextName = "Show EagleKitchen";
             var assembly = Assembly.GetExecutingAssembly();
             var assemblyLocation = assembly.Location;
-            const string iconName = "icon.png";
-            const string fullClassName = "four.EagleKitchen.ShowDockCommand";
+            const string iconName = "ek24.png";
+            const string fullClassName = "EK24.EagleKitchen.ShowDockCommand";
             const string toolTipInfo = "Show the EagleKitchen Dock";
 
             var pushButtonData = new PushButtonData(

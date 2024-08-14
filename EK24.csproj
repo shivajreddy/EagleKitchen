@@ -7,8 +7,8 @@
     <ProjectGuid>{75AF1A4A-2FB6-471C-A3D2-0206672CE879}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>four</RootNamespace>
-    <AssemblyName>four</AssemblyName>
+    <RootNamespace>EK24</RootNamespace>
+    <AssemblyName>EK24</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -36,6 +36,9 @@
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Office.Interop.Excel.15.0.4795.1001\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -74,13 +77,17 @@
     <Compile Include="RequestHandlingUtils\RequestHandler.cs" />
     <Compile Include="Utils\ExcelExporter.cs" />
     <Compile Include="Utils\ImageUtils.cs" />
+    <Compile Include="Utils\JsonToEnumConvertor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Readme.md" />
+    <Content Include="Resources\vendor_styles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="four.addin" />
+    <None Include="EK24.addin" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="icon.png" />
@@ -97,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="EagleKitchen\henning_color.png" />
+    <EmbeddedResource Include="Resources\ek24.png" />
     <Resource Include="Resources\material\SGCherryjpeg.png" />
     <Resource Include="Resources\material\rusticmaple.png" />
     <Resource Include="Resources\material\oak.png" />
@@ -118,17 +126,17 @@
   <PropertyGroup>
     <PostBuildEvent>echo Configuration: $(Configuration)
 
-if not exist "%25APPDATA%25\Autodesk\Revit\Addins\2024\four" mkdir "%25APPDATA%25\Autodesk\Revit\Addins\2024\four"
+if not exist "%25APPDATA%25\Autodesk\Revit\Addins\2024\EK24" mkdir "%25APPDATA%25\Autodesk\Revit\Addins\2024\EK24"
 
 echo "Projectdir = $(ProjectDir)"
 echo 'Targetdir = $(TargetDir)"
 
 echo "Copying the Addin in file"
-Xcopy /y "$(ProjectDir)four.addin" "%25APPDATA%25\Autodesk\Revit\Addins\2024\"
+Xcopy /y "$(ProjectDir)EK24.addin" "%25APPDATA%25\Autodesk\Revit\Addins\2024\"
 
 
 echo "Copying all the .dll files"
-Xcopy /y "$(TargetDir)*.dll" "%25APPDATA%25\Autodesk\Revit\Addins\2024\four"
+Xcopy /y "$(TargetDir)*.dll" "%25APPDATA%25\Autodesk\Revit\Addins\2024\EK24"
 
 </PostBuildEvent>
   </PropertyGroup>

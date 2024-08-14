@@ -1,13 +1,13 @@
 ﻿<!-- add your namespace declaration here -->
 <Page
-             x:Class="four.EagleKitchen.EagleKitchenUi"
-             xmlns:four="clr-namespace:four"
+             x:Class="EK24.EagleKitchen.EagleKitchenUi"
+             xmlns:four="clr-namespace:EK24"
 
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:utils="clr-namespace:four.Utils"
+             xmlns:utils="clr-namespace:EK24.Utils"
 
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="600"
@@ -37,8 +37,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
     </Page.Resources>
+
     <Grid>
 
         <TabControl>
@@ -81,6 +81,7 @@
                                     <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
                                         <Button Content="All: LOWERS" Margin="5px" Padding="5 0" Click="ClickSelectionAllLowers"/>
                                         <Button Content="All: UPPERS" Margin="5px" Padding="5 0" Click="ClickSelectionAllUppers"/>
+                                        <Button Content="All: CABINETS" Margin="5px" Padding="5 0" Click="ClickSelectionAllCabinets"/>
                                     </StackPanel>
                                     <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
                                         <Button Content="All: 1 Door" Margin="5px" Padding="5 0" Click="ClickSelectionAll1Door"/>
@@ -101,6 +102,8 @@
 
             </TabItem>
 
+
+            <!-- MAIN TAB 2: Selections -->
             <TabItem Header="Selections" FontSize="14">
                 <Grid Margin="10 5">
                     <Grid.RowDefinitions>
@@ -109,8 +112,8 @@
                         <RowDefinition Height="140"/>
                     </Grid.RowDefinitions>
 
-                    <!-- MAIN TAB 2: Selections -->
-                    <Border Grid.Row="0" 
+                    <!-- This is row 0 -->
+                    <Border Grid.Row="1" 
                             Margin="0 4" BorderBrush="DarkGray"
                             BorderThickness="1" CornerRadius="4" 
                             >
@@ -214,6 +217,63 @@
 
                         </ScrollViewer>
                     </Border>
+
+                    <!-- Testing new UI -->
+                    <Border Grid.Row="0" 
+                            Margin="0 4" BorderBrush="DarkGray"
+                            BorderThickness="1" CornerRadius="4" 
+                            >
+                        <StackPanel>
+                            <TextBlock TextAlignment="Center">Create New Item</TextBlock>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                                <StackPanel Margin="10">
+                                    <TextBlock Text="Vendor" HorizontalAlignment="Center"/>
+                                    <ComboBox x:Name="NewVendor" Width="100" SelectionChanged="NewVendor_SelectionChanged"/>
+                                </StackPanel>
+                                <StackPanel Margin="10">
+                                    <TextBlock Text="Shape" HorizontalAlignment="Center"/>
+                                    <ComboBox x:Name="NewShape" Width="100" SelectionChanged="NewShape_SelectionChanged"/>
+                                </StackPanel>
+                                <StackPanel Margin="10">
+                                    <TextBlock Text="Type" HorizontalAlignment="Center"/>
+                                    <ComboBox x:Name="NewType" Width="100" SelectionChanged="NewType_SelectionChanged"/>
+                                </StackPanel>
+                                <Button x:Name="NewCreateButton" Content="Create" IsEnabled="False" Margin="20 28 10 10" Width="100" HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="10">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <StackPanel Margin="10">
+                                        <TextBlock Text="Vendor" HorizontalAlignment="Center"/>
+                                        <ComboBox x:Name="NewVendor2" Width="100" SelectionChanged="NewVendor_SelectionChanged"/>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <Grid>
+                                            <TextBox x:Name="SearchTermTextBox" TextChanged="SearchBox_TextChanged"  Width="150"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5"/>
+                                            <TextBlock IsHitTestVisible="False" Text="Vendor SKEW" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="DarkGray">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="{x:Type TextBlock}">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox}" Value="">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
+                                        <ComboBox IsEditable="True" ItemsSource="{Binding FilteredItems}"></ComboBox>
+                                    </StackPanel>
+                                    <Button Width="100" Margin="10">CREATE</Button>
+                                </StackPanel>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+
 
                     <!--Style/Material/Handles-->
                     <Border Grid.Row="1"
@@ -512,6 +572,7 @@
                                     <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
                                         <Button Content="All: LOWERS" Margin="5px" Padding="5 0" Click="ClickSelectionAllLowers"/>
                                         <Button Content="All: UPPERS" Margin="5px" Padding="5 0" Click="ClickSelectionAllUppers"/>
+                                        <Button Content="All: CABINETS" Margin="5px" Padding="5 0" Click="ClickSelectionAllCabinets"/>
                                     </StackPanel>
                                     <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
                                         <Button Content="All: 1 Door" Margin="5px" Padding="5 0" Click="ClickSelectionAll1Door"/>

@@ -1,8 +1,8 @@
-﻿using System;
-using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.UI;
+using System;
 
 
-namespace four.EagleKitchen
+namespace EK24.EagleKitchen
 {
     // This utility class defines the DockablePanel and which internally Creates an instance of the XAML UI,
     // and uses that to
@@ -20,6 +20,7 @@ namespace four.EagleKitchen
 
         public static void RegisterDockablePanel(UIControlledApplication uiControlledApplication)
         {
+            UiData.InitializeFromJson();
             EagleKitchenUi = new EagleKitchenUi();
             uiControlledApplication.RegisterDockablePane(DockId, DockName, EagleKitchenUi);
         }
@@ -31,6 +32,5 @@ namespace four.EagleKitchen
             if (dock == null || dock.IsShown()) return;
             dock.Show();
         }
-
     }
 }

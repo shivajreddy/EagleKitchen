@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
 
 
 // not using this util now, cuz now we are subscribing to View Activated event, and we are getting the views from the event args.
 // and the function 'OnViewActivated' inside EagleKitchen.cs file
-namespace four.EagleKitchen.CoreModel
+namespace EK24.EagleKitchen.CoreModel
 {
     public static class Utils
     {
@@ -21,7 +16,7 @@ namespace four.EagleKitchen.CoreModel
             Assembly assembly = Assembly.GetExecutingAssembly();
 
             // Import all the text files here. TODO: later create a class with all core-model database objects as fields 
-            string resourceName = "four.EagleKitchen.CoreModel.Data.corvallis.txt";
+            string resourceName = "EK24.EagleKitchen.CoreModel.Data.corvallis.txt";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
@@ -37,7 +32,7 @@ namespace four.EagleKitchen.CoreModel
 
             // Normalize line breaks and split the text
             string[] lines = rawData.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n');
-        
+
             List<string> views = new List<string>();
             List<string> sheets = new List<string>();
 
@@ -73,7 +68,7 @@ namespace four.EagleKitchen.CoreModel
 
             return (views, sheets);
         }
-    
+
 
 
     }

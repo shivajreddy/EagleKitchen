@@ -1,26 +1,26 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Selection;
+using EK24.RequestHandlingUtils;
+using EK24.Utils;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-using Autodesk.Revit.UI.Selection;
-using four.RequestHandlingUtils;
-using four.Utils;
 using Button = System.Windows.Controls.Button;
-using View = Autodesk.Revit.DB.View;
 using SelectionChangedEventArgs = Autodesk.Revit.UI.Events.SelectionChangedEventArgs;
-using System.Collections.ObjectModel;
-using System.IO;
+using View = Autodesk.Revit.DB.View;
 
 
-namespace four.EagleKitchen
+namespace EK24.EagleKitchen
 {
     public enum CabinetConfiguration
     {
         AllLowers,
         AllUppers,
+        AllCabinets,
         All1Door,
         Only1Door,
         Only1Door1Drawer,
@@ -146,7 +146,7 @@ namespace four.EagleKitchen
                     Tag = view.Name,
                     Height = 30,
                     IsEnabled = true,
-                    Style = EagleKitchenDockUtils.EagleKitchenUi.FindResource("GoToViewButtonStyle") as Style
+                    Style = EagleKitchenDockUtils.EagleKitchenUi.FindResource("GoToViewButtonStyle") as System.Windows.Style
 
                 };
                 button.Click += Update_Current_View;
@@ -536,13 +536,22 @@ namespace four.EagleKitchen
                         .ToList();
                     uiDoc.Selection.SetElementIds(filteredElementIds);
                     break;
+                case CabinetConfiguration.AllCabinets:
+                    filteredElementIds = familyInstances
+                        .Where(x => x is FamilyInstance fi &&
+                                (fi.Symbol.Family.Name.Contains("Wall_Cabinet") ||
+                                 fi.Symbol.Family.Name.Contains("Base_Cabinet")))
+                        .Select(x => x.Id)
+                        .ToList();
+                    uiDoc.Selection.SetElementIds(filteredElementIds);
+                    break;
                 case CabinetConfiguration.All1Door:
                     filteredElementIds = familyInstances
                         .Where(x => (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_OneDoor" ||
-                                           (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_OneDoor-V2" ||
-                                           (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_OneDoor-V3" ||
-                                           (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_OneDoor+OneDrawer-V2" ||
-                                           (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_OneDoor+OneDrawer-V2"
+                                    (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_OneDoor-V2" ||
+                                    (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_OneDoor-V3" ||
+                                    (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_OneDoor+OneDrawer-V2" ||
+                                    (x as FamilyInstance)?.Symbol.Family.Name == "Base_Cabinet_OneDoor+OneDrawer-V2"
                                         )
                         .Select(x => x.Id)
                         .ToList();
@@ -834,6 +843,8 @@ namespace four.EagleKitchen
 
             // Get the print manager from the document
             PrintManager printManager = doc.PrintManager;
+
+
             printManager.PrintRange = PrintRange.Select;
 
             // For now

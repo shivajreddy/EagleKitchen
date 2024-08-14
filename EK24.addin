@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<!--This sets that this dll is an External Application, not External Command-->
+	<AddIn Type="Application">
+		<!--Name of the plugin, the user sees in always load popup window-->
+		<Name>EK24</Name>
+		<Assembly>EK24/EK24.dll</Assembly>
+		<FullClassName>EK24.Main</FullClassName>
+		<ClientId>545F95BD-6683-4163-89B3-4BBBF4C62D73</ClientId>
+		<VendorId>Eagle Construction of VA</VendorId>
+		<VendorDescription>Eagle Construction of VA</VendorDescription>
+	</AddIn>
+</RevitAddIns>
+

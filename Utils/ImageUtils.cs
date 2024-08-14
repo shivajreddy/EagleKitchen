@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace four.Utils
+namespace EK24.Utils
 {
     public static class ImageUtilities
     {
-        public static BitmapImage LoadImage(Assembly assembly, string name)
+        public static BitmapImage LoadImage(Assembly assembly, string imageName)
         {
             var img = new BitmapImage();
             try
             {
-                var resourceName = assembly.GetManifestResourceNames().FirstOrDefault(x => x.Contains(name));
+                var resourceName = assembly.GetManifestResourceNames().FirstOrDefault(x => x.Contains(imageName));
                 var stream = assembly.GetManifestResourceStream(resourceName);
                 img.BeginInit();
                 img.StreamSource = stream;

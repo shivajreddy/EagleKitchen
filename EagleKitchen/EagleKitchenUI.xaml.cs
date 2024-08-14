@@ -1,29 +1,70 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Media.Imaging;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using four.RequestHandlingUtils;
+using EK24.RequestHandlingUtils;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using Button = System.Windows.Controls.Button;
 
 
-namespace four.EagleKitchen
+namespace EK24.EagleKitchen
 {
     public partial class EagleKitchenUi : IDockablePaneProvider
     {
-
         // Static variables
         public static ISet<ElementId> ActiveSelectedElementIds;
         public static string EagleConsole = "empty console";
 
         public BitmapImage HenniBitmapImage { get; private set; }
 
+
+        /*
+        private ObservableCollection<string> _items;
+        private ObservableCollection<string> _filteredItems;
+        private string _searchText;
+
+        public ObservableCollection<string> Items
+        {
+            get => _items;
+            set
+            {
+                _items = value;
+                OnPropertyChanged(nameof(Items));
+            }
+        }
+
+        public ObservableCollection<string> FilteredItems
+        {
+            get => _filteredItems;
+            set
+            {
+                _filteredItems = value;
+                OnPropertyChanged(nameof(FilteredItems));
+            }
+        }
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(SearchText));
+                FilterItems();
+            }
+        }
+        */
+
         // Constructor for the XAML page
         public EagleKitchenUi()
         {
             InitializeComponent();
-            DataContext = this;
 
+            PopulateComboBoxes();
+
+            DataContext = this;
         }
 
 
@@ -39,22 +80,7 @@ namespace four.EagleKitchen
         }
 
 
-        //private void ClickOpenView(object sender, RoutedEventArgs e)
-        //{
-        //    Main.AppsRequestHandler.RequestType = RequestType.UpdateView;
-        //    Main.MyExternalEvent.Raise();
-        //}
-
-        private void ClickDevTest(object sender, RoutedEventArgs e)
-        {
-            Main.AppsRequestHandler.RequestType = RequestType.DevTest;
-            Main.MyExternalEvent.Raise();
-        }
-
-
-
-
-
+        #region SELECTIONS 
         // :: SELECTIONS ::
         private void ClickSelectionAllLowers(object sender, RoutedEventArgs e)
         {
@@ -66,6 +92,12 @@ namespace four.EagleKitchen
         {
             Main.AppsRequestHandler.RequestType = RequestType.MakeSelections;
             EagleKitchen.ChosenCabinetConfiguration = CabinetConfiguration.AllUppers;
+            Main.MyExternalEvent.Raise();
+        }
+        private void ClickSelectionAllCabinets(object sender, RoutedEventArgs e)
+        {
+            Main.AppsRequestHandler.RequestType = RequestType.MakeSelections;
+            EagleKitchen.ChosenCabinetConfiguration = CabinetConfiguration.AllCabinets;
             Main.MyExternalEvent.Raise();
         }
         private void ClickSelectionAll1Door(object sender, RoutedEventArgs e)
@@ -110,7 +142,9 @@ namespace four.EagleKitchen
             EagleKitchen.ChosenCabinetConfiguration = CabinetConfiguration.Only2Door2Drawers;
             Main.MyExternalEvent.Raise();
         }
+        #endregion
 
+        #region SELECTIONS - other stuff
         // :: Selections :: Instance Param Updates ::
         private void ClickCustomizeStyle(object sender, RoutedEventArgs e)
         {
@@ -148,6 +182,7 @@ namespace four.EagleKitchen
             Main.AppsRequestHandler.RequestType = RequestType.PrintDrawings;
             Main.MyExternalEvent.Raise();
         }
+        // :: EXPORT QUANTITIES :: //
         private void ExportQuantities_Click(object sender, RoutedEventArgs e)
         {
             Main.AppsRequestHandler.RequestType = RequestType.ExportQuantitiesToExcel;
@@ -240,6 +275,183 @@ namespace four.EagleKitchen
             // Set the Event so that Event Handler knows to use the appropriate Event
             Main.AppsRequestHandler.RequestType = RequestType.UpdateCabinetType;
             Main.MyExternalEvent.Raise();
+        }
+        #endregion
+
+        private void ClickDevTest(object sender, RoutedEventArgs e)
+        {
+            Main.AppsRequestHandler.RequestType = RequestType.DevTest;
+            Main.MyExternalEvent.Raise();
+        }
+
+        // TAB 2: Events
+        /*
+        private void FilterItems(ListBox listBox)
+        {
+            string searchText = SearchTermTextBox.Text.ToLower();
+            var filteredItems = new List<string>();
+            if (NewVendor2.SelectedIndex == 1)
+            {
+                filteredItems = vendor_1_types.Where(item => item.ToLower().Contains(searchText)).ToList();
+            }
+            if (NewVendor2.SelectedIndex == 2)
+            {
+                filteredItems = vendor_2_types.Where(item => item.ToLower().Contains(searchText)).ToList();
+            }
+
+            if (filteredItems.Any())
+            {
+                listBox.ItemsSource = filteredItems;
+                listBox.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                listBox.Visibility = System.Windows.Visibility.Hidden;
+            }
+        }
+        */
+
+        private void PopulateComboBoxes()
+        {
+
+            // Default item
+            string defaultItem = "Choose Input";
+
+            // Populate NewVendor ComboBox with brand name
+            NewVendor.Items.Clear();
+            NewVendor.Items.Add(defaultItem);
+            foreach (var brand in UiData.BrandNames)
+            {
+                NewVendor.Items.Add(brand);
+            }
+            NewVendor.SelectedIndex = 0; // Set default item as selected
+
+            // Initialize NewShape with just the default item
+            NewShape.Items.Clear();
+            NewShape.Items.Add(defaultItem);
+            NewShape.SelectedIndex = 0; // Set default item as selected
+
+            // Initialize NewType with just the default item
+            NewType.Items.Clear();
+            NewType.Items.Add(defaultItem);
+            NewType.SelectedIndex = 0; // Set default item as selected
+        }
+
+        private void NewVendor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string defaultItem = "Choose Input";
+
+            // Clear and reset the NewShape and NewType ComboBoxes
+            NewShape.Items.Clear();
+            NewShape.Items.Add(defaultItem);
+            NewShape.IsEnabled = false;
+            NewShape.SelectedIndex = 0;
+
+            NewType.Items.Clear();
+            NewType.Items.Add(defaultItem);
+            NewType.SelectedIndex = 0;
+
+            // Get the selected brand
+            string selectedBrand = NewVendor.SelectedItem as string;
+
+            // Populate NewShape (styles) based on the selected brand
+            if (!string.IsNullOrEmpty(selectedBrand) && selectedBrand != defaultItem)
+            {
+                if (UiData.StylesByBrand.ContainsKey(selectedBrand))
+                {
+                    foreach (var style in UiData.StylesByBrand[selectedBrand])
+                    {
+                        NewShape.Items.Add(style);
+                    }
+                }
+                NewShape.SelectedIndex = 0; // Set default item as selected
+            }
+        }
+
+        private void NewShape_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string defaultItem = "Choose Input";
+
+            // Clear the existing items in the NewType ComboBox
+            NewType.Items.Clear();
+            NewType.Items.Add(defaultItem);
+            NewType.SelectedIndex = 0;
+
+            // Get the selected brand and style
+            string selectedBrand = NewVendor.SelectedItem as string;
+            string selectedStyle = NewShape.SelectedItem as string;
+
+            // Populate NewType (finishes) based on the selected brand and style
+            if (!string.IsNullOrEmpty(selectedBrand) && selectedBrand != defaultItem &&
+                !string.IsNullOrEmpty(selectedStyle) && selectedStyle != defaultItem)
+            {
+                var key = (selectedBrand, selectedStyle);
+                if (UiData.FinishesByStyle.ContainsKey(key))
+                {
+                    foreach (var finish in UiData.FinishesByStyle[key])
+                    {
+                        NewType.Items.Add(finish);
+                    }
+                }
+                NewType.SelectedIndex = 0; // Set default item as selected
+            }
+        }
+
+        private void NewType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            // Check if all ComboBoxes have a selected value other than the default "Choose a value"
+            bool allSelected = NewVendor.SelectedIndex > 0 && NewShape.SelectedIndex > 0 && NewType.SelectedIndex > 0;
+            NewCreateButton.IsEnabled = allSelected;
+        }
+
+
+
+
+
+        /*
+        private void NewVendor_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (NewVendor.SelectedIndex == 0)
+            {
+                NewShape.SelectedIndex = 0;
+                NewShape.IsEnabled = false;
+
+                NewType.SelectedIndex = 0;
+                NewType.IsEnabled = false;
+
+                NewCreateButton.IsEnabled = false;
+            }
+            else
+            {
+                NewShape.SelectedIndex = 0;
+                NewShape.IsEnabled = true;
+            }
+        }
+        private void NewShape_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (NewShape.SelectedIndex == 0)
+            {
+                NewType.SelectedIndex = 0;
+                NewType.IsEnabled = false;
+
+                NewCreateButton.IsEnabled = false;
+            }
+            else
+            {
+                NewType.SelectedIndex = 0;
+                NewType.IsEnabled = true;
+            }
+        }
+        private void NewType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            // Check if all ComboBoxes have a selected value other than the default "Choose a value"
+            bool allSelected = NewVendor.SelectedIndex > 0 && NewShape.SelectedIndex > 0 && NewType.SelectedIndex > 0;
+            NewCreateButton.IsEnabled = allSelected;
+        }
+        */
+
+        private void SearchBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
         }
     }
 }
