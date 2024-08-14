@@ -77,12 +77,14 @@
     <Compile Include="RequestHandlingUtils\RequestHandler.cs" />
     <Compile Include="Utils\ExcelExporter.cs" />
     <Compile Include="Utils\ImageUtils.cs" />
-    <Compile Include="Utils\JsonToEnumConvertor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Readme.md" />
-    <Content Include="Resources\vendor_styles.json">
+    <Content Include="Resources\ek24_brands_styles_finishes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\ek24_cabinet_shapes.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

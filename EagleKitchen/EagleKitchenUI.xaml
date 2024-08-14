@@ -247,7 +247,7 @@
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <StackPanel Margin="10">
                                         <TextBlock Text="Vendor" HorizontalAlignment="Center"/>
-                                        <ComboBox x:Name="NewVendor2" Width="100" SelectionChanged="NewVendor_SelectionChanged"/>
+                                        <ComboBox x:Name="NewVendorV2" Width="100" SelectionChanged="NewVendorV2_SelectionChanged"/>
                                     </StackPanel>
                                     <StackPanel>
                                         <Grid>
@@ -265,7 +265,7 @@
                                                 </TextBlock.Style>
                                             </TextBlock>
                                         </Grid>
-                                        <ComboBox IsEditable="True" ItemsSource="{Binding FilteredItems}"></ComboBox>
+                                        <ComboBox x:Name="NewTypeV2" IsEditable="True" ItemsSource="{Binding FilteredItems}"></ComboBox>
                                     </StackPanel>
                                     <Button Width="100" Margin="10">CREATE</Button>
                                 </StackPanel>

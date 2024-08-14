@@ -320,11 +320,21 @@ namespace EK24.EagleKitchen
             // Populate NewVendor ComboBox with brand name
             NewVendor.Items.Clear();
             NewVendor.Items.Add(defaultItem);
-            foreach (var brand in UiData.BrandNames)
+            foreach (var brand in UiData.FamilyBrandNames)
             {
                 NewVendor.Items.Add(brand);
             }
             NewVendor.SelectedIndex = 0; // Set default item as selected
+
+            // Populate NewVendorV2 ComboBox with brand name
+            NewVendorV2.Items.Clear();
+            NewVendorV2.Items.Add(defaultItem);
+            foreach (var brand in UiData.FamilyBrandNames)
+            {
+                NewVendorV2.Items.Add(brand);
+            }
+            NewVendorV2.SelectedIndex = 0; // Set default item as selected
+
 
             // Initialize NewShape with just the default item
             NewShape.Items.Clear();
@@ -344,7 +354,6 @@ namespace EK24.EagleKitchen
             // Clear and reset the NewShape and NewType ComboBoxes
             NewShape.Items.Clear();
             NewShape.Items.Add(defaultItem);
-            NewShape.IsEnabled = false;
             NewShape.SelectedIndex = 0;
 
             NewType.Items.Clear();
@@ -357,14 +366,47 @@ namespace EK24.EagleKitchen
             // Populate NewShape (styles) based on the selected brand
             if (!string.IsNullOrEmpty(selectedBrand) && selectedBrand != defaultItem)
             {
-                if (UiData.StylesByBrand.ContainsKey(selectedBrand))
+                if (UiData.FamilyShapesByBrand.ContainsKey(selectedBrand))
                 {
-                    foreach (var style in UiData.StylesByBrand[selectedBrand])
+                    foreach (var shape in UiData.FamilyShapesByBrand[selectedBrand])
                     {
-                        NewShape.Items.Add(style);
+                        NewShape.Items.Add(shape);
                     }
                 }
                 NewShape.SelectedIndex = 0; // Set default item as selected
+            }
+        }
+
+        private void NewVendorV2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string defaultItem = "Choose Input";
+
+            NewTypeV2.Items.Clear();
+            NewTypeV2.Items.Add(defaultItem);
+            NewTypeV2.SelectedIndex = 0;
+
+            // Get the selected brand
+            string selectedBrand = NewVendorV2.SelectedItem as string;
+
+            // Populate Types based on the selected brand
+            if (!string.IsNullOrEmpty(selectedBrand) && selectedBrand != defaultItem)
+            {
+                // Get all shapes for the selected brand
+                if (UiData.FamilyShapesByBrand.TryGetValue(selectedBrand, out string[] shapes))
+                {
+                    // For every shape in the selected brand, get all types and add them to NewTypeV2
+                    foreach (var shape in shapes)
+                    {
+                        if (UiData.FamilyTypesByShape.TryGetValue((selectedBrand, shape), out string[] types))
+                        {
+                            foreach (var type in types)
+                            {
+                                NewTypeV2.Items.Add(type);
+                            }
+                        }
+                    }
+                }
+                NewTypeV2.SelectedIndex = 0; // Set default item as selected
             }
         }
 
@@ -379,18 +421,18 @@ namespace EK24.EagleKitchen
 
             // Get the selected brand and style
             string selectedBrand = NewVendor.SelectedItem as string;
-            string selectedStyle = NewShape.SelectedItem as string;
+            string selectedShape = NewShape.SelectedItem as string;
 
             // Populate NewType (finishes) based on the selected brand and style
             if (!string.IsNullOrEmpty(selectedBrand) && selectedBrand != defaultItem &&
-                !string.IsNullOrEmpty(selectedStyle) && selectedStyle != defaultItem)
+                !string.IsNullOrEmpty(selectedShape) && selectedShape != defaultItem)
             {
-                var key = (selectedBrand, selectedStyle);
-                if (UiData.FinishesByStyle.ContainsKey(key))
+                var key = (selectedBrand, selectedShape);
+                if (UiData.FamilyTypesByShape.ContainsKey(key))
                 {
-                    foreach (var finish in UiData.FinishesByStyle[key])
+                    foreach (var type in UiData.FamilyTypesByShape[key])
                     {
-                        NewType.Items.Add(finish);
+                        NewType.Items.Add(type);
                     }
                 }
                 NewType.SelectedIndex = 0; // Set default item as selected
@@ -453,5 +495,6 @@ namespace EK24.EagleKitchen
         private void SearchBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
         }
+
     }
 }

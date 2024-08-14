@@ -20,7 +20,10 @@ namespace EK24.EagleKitchen
 
         public static void RegisterDockablePanel(UIControlledApplication uiControlledApplication)
         {
-            UiData.InitializeFromJson();
+            // no need to call this method specifically
+            // its now moved to the static classe's constructor
+            //UiData.InitializeFromJson();
+
             EagleKitchenUi = new EagleKitchenUi();
             uiControlledApplication.RegisterDockablePane(DockId, DockName, EagleKitchenUi);
         }
