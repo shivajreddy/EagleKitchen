@@ -1,12 +1,10 @@
 ﻿using Autodesk.Revit.UI;
-using EK24.EagleKitchen;
+using EK24.EagleKitchenView;
 using EK24.RequestHandlingUtils;
 
 
 namespace EK24
 {
-
-
     public class Main : IExternalApplication
     {
         // static Request-handler variables
@@ -35,10 +33,10 @@ namespace EK24
             // For each event, look at that particular EventArgs that revit will pass as 2nd arg to the given function.
             // the first argument is the sender: Here sender is the 'UIApplication' not 'UIControlledApplication' nor 'Application',
             // but however we can type cast to 'Application' type, if we need that type.
-            application.SelectionChanged += EagleKitchen.EagleKitchen.OnSelectionChange;
+            application.SelectionChanged += EagleKitchenViewModel.OnSelectionChange;
 
 
-            application.ViewActivated += EagleKitchen.EagleKitchen.OnViewActivated;
+            application.ViewActivated += EagleKitchenViewModel.OnViewActivated;
 
             return Result.Succeeded;
         }

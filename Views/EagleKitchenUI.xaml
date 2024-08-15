@@ -1,0 +1,714 @@
+﻿<!-- add your namespace declaration here -->
+<!--xmlns:EK24="clr-namespace:EK24"-->
+
+             <!--x:Class="EK24.EagleKitchen.EagleKitchenUi"-->
+             <!-- xmlns:util="clr-namespace:EK24.EagleKitchenView"-->
+<Page
+             x:Class="EK24.EagleKitchenView.EagleKitchenMainUi"
+
+
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+
+             xmlns:vm="clr-namespace:EK24.VendorViewModels"
+
+             xmlns:ek24="clr-namespace:EK24"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="600"
+             Background="AliceBlue"
+      >
+    <Page.DataContext>
+        <vm:VendorViewModel/>
+    </Page.DataContext>
+    <Page.Resources>
+        <!-- Button: Go To View or Sheet-->
+        <!-- Define the Button Style -->
+        <Style x:Key="GoToViewButtonStyle" TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="CornflowerBlue"/>
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="Background" Value="LightCyan"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4" BorderBrush="Black" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+
+        <TabControl>
+
+            <!-- MAIN TAB 1: Visualisations: Sheets & 3D views -->
+            <TabItem Header="Visualizations" FontSize="14">
+
+                <Grid Margin="10 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="140"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Margin="0 5">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="VIEWS" TextAlignment="Center" FontSize="18" FontWeight="SemiBold"/>
+
+                            <StackPanel Name="ListOfEK24Views" Margin="40 0">
+                                <Button Style="{StaticResource GoToViewButtonStyle}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Margin="0 10">
+                        <StackPanel Margin="10" >
+                            <TextBlock Text="SHEETS" TextAlignment="Center" FontSize="18" FontWeight="SemiBold"/>
+                            <StackPanel Name="ListOfEK24Sheets" Margin="40 0">
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="2" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="15 0" >
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 4">
+                                    <TextBlock Text="ⓘ" FontWeight="Bold" Margin="0 0 4px 0"/>
+                                    <TextBlock Text="Cabinet selection controls"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
+                                        <Button Content="All: LOWERS" Margin="5px" Padding="5 0" Click="ClickSelectionAllLowers"/>
+                                        <Button Content="All: UPPERS" Margin="5px" Padding="5 0" Click="ClickSelectionAllUppers"/>
+                                        <Button Content="All: CABINETS" Margin="5px" Padding="5 0" Click="ClickSelectionAllCabinets"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
+                                        <Button Content="All: 1 Door" Margin="5px" Padding="5 0" Click="ClickSelectionAll1Door"/>
+                                        <Button Content="Only: 1 Door" Margin="5px" Padding="5 0" Click="ClickSelectionOnly1Door"/>
+                                        <Button Content="Only: 1 Door + Drawer" Margin="5px" Padding="5 0"  Click="ClickSelectionOnly1Door1Drawer"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
+                                        <Button Content="All: 2 Doors" Margin="5px" Padding="5 0" Click="ClickSelectionAll2Doors"/>
+                                        <Button Content="Only: 2 Doors" Margin="5px" Padding="5 0" Click="ClickSelectionOnly2Doors"/>
+                                        <Button Content="Only: 2 Doors + 1 Drawer" Margin="5px" Padding="5 0" Click="ClickSelectionOnly2Doors1Drawer"/>
+                                        <Button Content="Only: 2 Doors + 2 Drawer" Margin="5px" Padding="5 0" Click="ClickSelectionOnly2Doors2Drawers"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+
+            </TabItem>
+
+            <!-- MAIN TAB 2: Selections -->
+            <TabItem Header="Selections" FontSize="14">
+                <Grid Margin="10 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="300"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="180"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- This is row 1: instance properties panel -->
+                    <Border Grid.Row="0" 
+                            Margin="0 4" BorderBrush="DarkGray"
+                            BorderThickness="1" CornerRadius="4" 
+                            >
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10"
+                                      VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+                            <StackPanel>
+
+                                <!--Instance Properties of cabinets-->
+                                <!--<StackPanel x:Name="InstancePptiesPanel_Cabinets" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <StackPanel Margin="10">
+                                        <TextBlock Text="Vendor" HorizontalAlignment="Center"/>
+                                        <ComboBox x:Name="UpdateVendor" Width="100" SelectionChanged="NewVendor_SelectionChanged"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="10">
+                                        <TextBlock Text="Type" HorizontalAlignment="Center"/>
+                                        <ComboBox x:Name="UpdateType" Width="100" SelectionChanged="NewType_SelectionChanged"/>
+                                    </StackPanel>
+                                    <Button x:Name="InstanePptiesUpdate" Content="Update" IsEnabled="False" Margin="20 28 10 10" Width="100" HorizontalAlignment="Center"/>
+                                </StackPanel>-->
+
+                                <!--Instance Properties of Range Hoods-->
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="Total Active Selections: " FontSize="16"/>
+                                    <TextBlock x:Name="TotalSelections" FontWeight="Bold" Text="0" FontSize="16"/>
+                                </StackPanel>
+
+                                <!--  Family, Type Settings -->
+                                <Border 
+                                    BorderBrush="LightGray" BorderThickness="1" 
+                                    CornerRadius="4" Margin="10">
+                                    <StackPanel Margin="10 10">
+                                        <TextBlock Text="Cabinet: Family, Type Settings" HorizontalAlignment="Center"/>
+
+                                        <!--<TextBlock Text="Choose Configuration &amp; Size" FontSize="16"/>
+                                        <ComboBox x:Name="FamilyTypeOptions"></ComboBox>-->
+
+                                        <TextBlock Text="Update Type" FontSize="16" />
+                                        <ComboBox x:Name="TypeOptions"/>
+
+                                        <Button Margin="0 14 0 0" x:Name="FamilyTypeSettingsUpdate" Click="FamilyTypeSettingsUpdate_Click" Content="UPDATE"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Common Settings -->
+                                <!--<Border 
+                                    BorderBrush="LightGray" BorderThickness="1" 
+                                    CornerRadius="4" Margin="10">
+                                    <StackPanel Name="CommonSettings" Orientation="Vertical" Margin="10 5">
+                                        <TextBlock Text="Common Settings" HorizontalAlignment="Center"/>
+                                        --><!--<CheckBox Name="InstanceParamIsButt" IsEnabled="False" Content="Is Butt" Margin="5"/>--><!--
+                                        <StackPanel Orientation="Horizontal" Margin="5 10">
+                                            <CheckBox Name="InstanceParamHasLeftFillerStrip"
+                                                      IsEnabled="False"
+                                                      Unchecked="InstanceParamHasLeftFillerStrip_StateChanged"
+                                                      Checked="InstanceParamHasLeftFillerStrip_StateChanged"
+                                                      Content="Left Filler Strip"/>
+                                            <StackPanel Orientation="Horizontal" Margin="20 0">
+                                                <TextBlock Text="Width (In Inches)" Margin="5 0"/>
+                                                <TextBox Name="InstanceParamLeftFillerStripValue" Text="" Width="50"/>
+                                                <Button
+                                                    Name="InstanceParamLeftFillerStripSetButton"
+                                                    Click="ButtonClick_SetLeftFillerStripWidth" Margin="10 0" Padding=" 5 0">Set</Button>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="5 10">
+                                            <CheckBox Name="InstanceParamHasRightFillerStrip"
+                                                      IsEnabled="False"
+                                                      Checked="InstanceParamHasRightFillerStrip_StateChanged"
+                                                      Unchecked="InstanceParamHasRightFillerStrip_StateChanged"
+                                                      Content="Right Filler Strip"/>
+                                            <StackPanel Orientation="Horizontal" Margin="10 0">
+                                                <TextBlock Text="Width (In Inches)" Margin="5 0"/>
+                                                <TextBox Name="InstanceParamRightFillerStripValue" IsEnabled="False" Text="" Width="50" />
+                                                <Button Name="InstanceParamRightFillerStripSetButton" Click="ButtonClick_SetRightFillerStripWidth" Margin="10 0" Padding=" 5 0">Set</Button>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>-->
+
+                                <!-- Single Door Cabinet Settings -->
+                                <!--<Border 
+                                    BorderBrush="LightGray" BorderThickness="1" 
+                                    CornerRadius="4" Margin="10">
+                                    <StackPanel Name="SingleDoorSettings" Margin="10 5">
+                                        <TextBlock Text="Single Door Cabinet Settings" HorizontalAlignment="Center"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Handle Location" Margin="0 1 0 0"/>
+                                            <ComboBox Width="100" Margin="10 0 0 0">
+                                                <TextBlock Text="Left"/>
+                                                <TextBlock Text="Right"/>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>-->
+
+                                <!-- Upper Cabinet Settings -->
+                                <!--<Border 
+                                    BorderBrush="LightGray" BorderThickness="1" 
+                                    CornerRadius="4" Margin="10">
+                                    <StackPanel Name="UpperCabinetSettings" Margin="10 5">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <TextBlock Text="ⓘ" FontWeight="Bold" Margin="0 0 4px 0"/>
+                                            <TextBlock Text="Upper Cabinet Settings" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Height From Ground"/>
+                                            <TextBox Text="" Width="50" Margin="10 0 0 0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>-->
+
+
+                            </StackPanel>
+
+                        </ScrollViewer>
+                    </Border>
+
+                    <!--Row 2: Instance properties: Style/Material/Handles-->
+                    <Border Grid.Row="1"
+                            Margin="0 10" BorderBrush="DarkGray"
+                            BorderThickness="1" CornerRadius="4" 
+                            >
+
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10"
+                                      VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            
+                        <StackPanel CanHorizontallyScroll="True" Margin="20 5"
+                                >
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="ⓘ" FontWeight="Bold" Margin="0 0 4 0"/>
+                                <TextBlock Text="Choose Style, Material, HandleSets"/>
+                            </StackPanel>
+
+                            <!--Choose a vendor-style -->
+                            <StackPanel>
+                                <TextBlock>Choose Vendor Style</TextBlock>
+                                <ComboBox x:Name="VendorStyleFinish_VendorName" 
+                                          ItemsSource="{Binding Vendors}" 
+                                          SelectedItem="{Binding SelectedVendor}"
+                                          SelectionChanged="VendorStyleFinish_VendorName_SelectionChanged" />
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                    <ItemsControl ItemsSource="{Binding AvailableStyles}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                    <Button Command="{Binding DataContext.SelectStyleCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                            CommandParameter="{Binding}" 
+                                                            MinWidth="100" 
+                                                            Background="Transparent" 
+                                                            Padding="0" 
+                                                            Margin="0" 
+                                                            BorderThickness="0">
+                                                        <StackPanel>
+                                                            <Image Width="70" Source="{Binding ImagePath}" />
+                                                            <TextBlock Text="{Binding StyleName}" 
+                                                                       VerticalAlignment="Center" 
+                                                                       HorizontalAlignment="Center" 
+                                                                       Foreground="Black" 
+                                                                       FontSize="14px" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+
+
+                            <!--Choose a vendor-Finish -->
+                                <TextBlock>Choose Finish</TextBlock>
+                                <ComboBox x:Name="InstancePptyFinish" 
+                                          ItemsSource="{Binding AvailableFinishes}" 
+                                          SelectedItem="{Binding SelectedFinish}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding ImagePath}" Width="20" Height="20" Margin="5"/>
+                                                <TextBlock Text="{Binding FinishName}" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+
+                                <Button Command="{Binding ApplyFinishCommand}">Apply Finish</Button>
+                            </StackPanel>
+
+
+                            <!--Choose a vendor-style -->
+                            <!--<StackPanel>
+                                <TextBlock>Choose vendor Style</TextBlock>
+                                <ComboBox x:Name="VendorStyleFinish_VendorName" SelectionChanged="VendorStyleFinish_VendorName_SelectionChanged" ></ComboBox>
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                                    <StackPanel Name="Sub2_StyleInstanceParam" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
+                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                            <Button Click="ClickCustomizeStyle" Tag="Style2" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                <StackPanel>
+                                                    <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langdon.png"/>
+                                                    <TextBlock Text="Touraine Birch" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                            <Button Click="ClickCustomizeStyle" Tag="Style5" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                <StackPanel>
+                                                    <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langdon.png"/>
+                                                    <TextBlock Text="Langdon" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                            <Button Click="ClickCustomizeStyle" Tag="Style4" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                <StackPanel>
+                                                    <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langdon.png"/>
+                                                    <TextBlock Text="FillMore" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                            <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                <StackPanel>
+                                                    <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langdon.png"/>
+                                                    <TextBlock Text="Henning" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                            <Button Click="ClickCustomizeStyle" Tag="Style6" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                <StackPanel>
+                                                    <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langdon.png"/>
+                                                    <TextBlock Text="Langdon" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                            <Button Click="ClickCustomizeStyle" Tag="Style3" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                <StackPanel>
+                                                    <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langdon.png"/>
+                                                    <TextBlock Text="Still Water" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                            <Button Click="ClickCustomizeStyle" Tag="Style3" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                <StackPanel>
+                                                    <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langdon.png"/>
+                                                    <TextBlock Text="Still Water" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                            <Button Click="ClickCustomizeStyle" Tag="Style3" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                <StackPanel>
+                                                    <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langdon.png"/>
+                                                    <TextBlock Text="Still Water" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                            <Button Click="ClickCustomizeStyle" Tag="Style3" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                <StackPanel>
+                                                    <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langdon.png"/>
+                                                    <TextBlock Text="Still Water" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                            <Button Click="ClickCustomizeStyle" Tag="Style3" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                <StackPanel>
+                                                    <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langdon.png"/>
+                                                    <TextBlock Text="Still Water" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                </StackPanel>
+                                            </Button>
+                                        </Border>
+                                    </StackPanel>
+                                </ScrollViewer>
+                                <TextBlock>Choose Finish</TextBlock>
+                                <ComboBox x:Name="InstancePptyFinish" SelectionChanged="InstancePptyFinish_SelectionChanged">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding ImagePath}" Width="20" Height="20" Margin="5"/>
+                                                <TextBlock Text="{Binding StyleFinishName}" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <Button>Apply Finish</Button>
+                            </StackPanel>-->
+
+
+                            <TabControl>
+                                <TabItem Header="Vendors">
+                                    <!-- Sub-Tabs -->
+                                    <TabControl Margin="0 10" BorderThickness="1">
+                                        <TabItem Header="Aristokraft">
+                                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                            </ScrollViewer>
+                                        </TabItem>
+
+                                        <TabItem Header="Yourktowne-Classic">
+                                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                                                <StackPanel Name="StyleInstanceParam" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
+
+                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                        <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                            <StackPanel>
+                                                                <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/benton-birch-Arid.jpg"/>
+                                                                <TextBlock Text="Henning" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                            </StackPanel>
+                                                        </Button>
+                                                    </Border>
+                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                        <Button Click="ClickCustomizeStyle" Tag="Style2" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                            <StackPanel>
+                                                                <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/brelin-purestyle-frost.jpg"/>
+                                                                <TextBlock Text="Touraine Birch" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                            </StackPanel>
+                                                        </Button>
+                                                    </Border>
+                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                        <Button Click="ClickCustomizeStyle" Tag="Style3" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                            <StackPanel>
+                                                                <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/eclipse-metropolitan.png"/>
+                                                                <TextBlock Text="Still Water" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                            </StackPanel>
+                                                        </Button>
+                                                    </Border>
+                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                        <Button Click="ClickCustomizeStyle" Tag="Style4" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                            <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/sinclair-birch-Natural.jpg"/>
+                                                                <TextBlock Text="FillMore" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                            </StackPanel>
+                                                        </Button>
+                                                    </Border>
+                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                        <Button Click="ClickCustomizeStyle" Tag="Style5" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                            <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/winstead-birch-flagstone.jpg"/>
+                                                                <TextBlock Text="Langdon" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                            </StackPanel>
+                                                        </Button>
+                                                    </Border>
+                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                        <Button Click="ClickCustomizeStyle" Tag="Style6" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                            <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/ytc-fillmore.png"/>
+                                                                <TextBlock Text="Langdon" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                            </StackPanel>
+                                                        </Button>
+                                                    </Border>
+
+                                                </StackPanel>
+                                            </ScrollViewer>
+                                        </TabItem>
+
+                                        <TabItem Header="Aristokraft">
+                                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                            </ScrollViewer>
+                                        </TabItem>
+
+                                        <TabItem Header="Yorktowne-Historic (Demo)">
+                                        </TabItem>
+                                    </TabControl>
+
+
+                                </TabItem>
+
+                                <TabItem Header="Finish">
+
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                                        <StackPanel Name="MaterialInstanceParam" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
+
+                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                    <StackPanel>
+                                                        <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langon.png"/>
+                                                        <TextBlock Text="Cherry" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </Border>
+                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                    <StackPanel>
+                                                        <Image Width="70" Source="/ek24;component/Resources/material/styles/ek_styles/ytc-fillmore.png"/>
+                                                        <TextBlock Text="Hickory" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </Border>
+
+                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                    <StackPanel>
+                                                        <Image Width="70" Source="/ek24;component/Resources/material/maple.png"/>
+                                                        <TextBlock Text="Maple" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </Border>
+
+                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                    <StackPanel>
+                                                        <Image Width="70" Source="/ek24;component/Resources/material/oak.png"/>
+                                                        <TextBlock Text="Oak" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </Border>
+
+                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                    <StackPanel>
+                                                        <Image Width="70" Source="/ek24;component/Resources/material/rusticmaple.png"/>
+                                                        <TextBlock Text="Rustic maple" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </Border>
+
+                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                    <StackPanel>
+                                                        <Image Width="70" Source="/ek24;component/Resources/material/SGCherryjpeg.png"/>
+                                                        <TextBlock Text="Straight Grain" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        <TextBlock Text="Cherry" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </Border>
+
+                                        </StackPanel>
+                                    </ScrollViewer>
+
+                                </TabItem>
+
+                                <TabItem Header="Handles" >
+
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                                        <StackPanel Name="HandleInstanceParam" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
+
+                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                    <StackPanel>
+                                                        <Image Height="100" Source="/ek24;component/Resources/handlesets/transitional.png"/>
+                                                        <TextBlock Text="Transitional" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        <TextBlock Text="Pull" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </Border>
+                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                    <StackPanel>
+                                                        <Image Width="70" Source="/ek24;component/Resources/handlesets/traditionalknob.png"/>
+                                                        <TextBlock Text="Traditional" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        <TextBlock Text="Knob" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </Border>
+
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </TabItem>
+                            </TabControl>
+                        </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Row 3: Create new item panel -->
+                    <Border Grid.Row="2" 
+                            Margin="0 4" BorderBrush="DarkGray"
+                            BorderThickness="1" CornerRadius="4" 
+                            >
+                        <StackPanel>
+                            <TextBlock TextAlignment="Center">Create New Item</TextBlock>
+
+                            <!-- Createtion Panel: First way -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel Margin="10">
+                                    <TextBlock Text="Vendor" HorizontalAlignment="Center"/>
+                                    <ComboBox x:Name="NewVendor" Width="100" SelectionChanged="NewVendor_SelectionChanged"/>
+                                </StackPanel>
+                                <StackPanel Margin="10">
+                                    <TextBlock Text="Shape" HorizontalAlignment="Center"/>
+                                    <ComboBox x:Name="NewShape" Width="100" SelectionChanged="NewShape_SelectionChanged"/>
+                                </StackPanel>
+                                <StackPanel Margin="10">
+                                    <TextBlock Text="Type" HorizontalAlignment="Center"/>
+                                    <ComboBox x:Name="NewType" Width="100" SelectionChanged="NewType_SelectionChanged"/>
+                                </StackPanel>
+                                <Button x:Name="NewCreateButton" Content="Create" IsEnabled="False" Margin="20 28 10 10" Width="100" HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Createtion Panel: Second way -->
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <StackPanel Margin="20 0">
+                                    <TextBlock Text="Vendor"/>
+                                    <ComboBox x:Name="NewVendorV2" Width="100" SelectionChanged="NewVendorV2_SelectionChanged"/>
+                                </StackPanel>
+                                <StackPanel Margin="20 0">
+                                    <TextBox x:Name="SearchTermTextBox" VerticalAlignment="Top" Width="200" TextChanged="SearchTextBox_TextChanged" Height="25" />
+                                    <ComboBox x:Name="NewTypeV2" IsTextSearchEnabled="True"  VerticalAlignment="Top" IsEditable="True" IsReadOnly="False" Height="25" Width="200"/>
+                                    <!-- 
+                                    <ComboBox x:Name="NewTypeV2" ItemsSource="{Binding AllTypesOfTheBrand}" VerticalAlignment="Top" IsEditable="True" IsReadOnly="True" SelectionChanged="NamesComboBox_SelectionChanged" Height="25" Width="200"/>
+                                    -->
+                                </StackPanel>
+                                <Button x:Name="NewCreateButtonV2" Margin="20 0" Content="Create" VerticalAlignment="Center" Height="50" Width="100"  IsEnabled="False" />
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Row 4: Selection controls -->
+                    <!-- Same code as the selection controls in Visualizations tab-->
+                    <!--<Border Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="15 0" >
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 4">
+                                    <TextBlock Text="ⓘ" FontWeight="Bold" Margin="0 0 4px 0"/>
+                                    <TextBlock Text="Cabinet selection controls"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
+                                        <Button Content="All: LOWERS" Margin="5px" Padding="5 0" Click="ClickSelectionAllLowers"/>
+                                        <Button Content="All: UPPERS" Margin="5px" Padding="5 0" Click="ClickSelectionAllUppers"/>
+                                        <Button Content="All: CABINETS" Margin="5px" Padding="5 0" Click="ClickSelectionAllCabinets"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
+                                        <Button Content="All: 1 Door" Margin="5px" Padding="5 0" Click="ClickSelectionAll1Door"/>
+                                        <Button Content="Only: 1 Door" Margin="5px" Padding="5 0" Click="ClickSelectionOnly1Door"/>
+                                        <Button Content="Only: 1 Door + Drawer" Margin="5px" Padding="5 0"  Click="ClickSelectionOnly1Door1Drawer"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="0px" Orientation="Horizontal" CanVerticallyScroll="True">
+                                        <Button Content="All: 2 Doors" Margin="5px" Padding="5 0" Click="ClickSelectionAll2Doors"/>
+                                        <Button Content="Only: 2 Doors" Margin="5px" Padding="5 0" Click="ClickSelectionOnly2Doors"/>
+                                        <Button Content="Only: 2 Doors + 1 Drawer" Margin="5px" Padding="5 0" Click="ClickSelectionOnly2Doors1Drawer"/>
+                                        <Button Content="Only: 2 Doors + 2 Drawer" Margin="5px" Padding="5 0" Click="ClickSelectionOnly2Doors2Drawers"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>-->
+
+                </Grid>
+                <!--Container of Customizations Tab-->
+            </TabItem>
+
+            <!-- MAIN TAB 3: Print PDF & Export Excel  -->
+            <TabItem Header="Export" FontSize="14">
+                <StackPanel VerticalAlignment="Center" Margin="20">
+                    <Button Name="PrintDrawingSet" Click="ClickPrintDrawingSet" Content="Create Drawing's PDF" 
+                            FontSize="18"
+                            Margin="0 10" Padding="5" Width="200" Height="50" Background="#AED9E0"
+                            />
+                    <Button x:Name="ExportQuantities" Content="Create Purchase List" Visibility="Visible" 
+                            FontSize="18"
+                            Margin="0 10" Padding="5" Width="200" Height="50" Background="#89CE94"
+                            Click="ExportQuantities_Click" />
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Developer Debug" FontSize="14" >
+
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10">
+                    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                        <TextBlock Text="console" FontWeight="Bold"/>
+                        <Border BorderThickness="2" BorderBrush="Gray">
+                            <TextBox x:Name="ConsoleTextBox" 
+                                 HorizontalAlignment="Stretch" 
+                                 VerticalAlignment="Stretch" 
+                                 VerticalScrollBarVisibility="Auto"
+                                 IsReadOnly="True"
+                                 TextWrapping="Wrap"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!--<TextBlock x:Name="UIActiveSelections" Text="None" />
+                    <Button x:Name="DevTest2" Content="boop" Visibility="Visible" 
+                            FontSize="12"
+                            Padding="5" Width="200" Height="50" Background="#FFA69E"
+                            Click="ClickDevTest" />-->
+
+                </StackPanel>
+
+            </TabItem>
+
+        </TabControl>
+
+    </Grid>
+</Page>
