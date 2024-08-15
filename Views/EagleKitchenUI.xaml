@@ -1,8 +1,8 @@
 ﻿<!-- add your namespace declaration here -->
 <!--xmlns:EK24="clr-namespace:EK24"-->
 
-             <!--x:Class="EK24.EagleKitchen.EagleKitchenUi"-->
-             <!-- xmlns:util="clr-namespace:EK24.EagleKitchenView"-->
+<!--x:Class="EK24.EagleKitchen.EagleKitchenUi"-->
+<!-- xmlns:util="clr-namespace:EK24.EagleKitchenView"-->
 <Page
              x:Class="EK24.EagleKitchenView.EagleKitchenMainUi"
 
@@ -20,9 +20,9 @@
              d:DesignHeight="800" d:DesignWidth="600"
              Background="AliceBlue"
       >
-    <Page.DataContext>
+    <!--<Page.DataContext>
         <vm:VendorViewModel/>
-    </Page.DataContext>
+    </Page.DataContext>-->
     <Page.Resources>
         <!-- Button: Go To View or Sheet-->
         <!-- Define the Button Style -->
@@ -117,7 +117,7 @@
             <TabItem Header="Selections" FontSize="14">
                 <Grid Margin="10 5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="300"/>
+                        <RowDefinition Height="200"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="180"/>
                     </Grid.RowDefinitions>
@@ -175,7 +175,9 @@
                                     CornerRadius="4" Margin="10">
                                     <StackPanel Name="CommonSettings" Orientation="Vertical" Margin="10 5">
                                         <TextBlock Text="Common Settings" HorizontalAlignment="Center"/>
-                                        --><!--<CheckBox Name="InstanceParamIsButt" IsEnabled="False" Content="Is Butt" Margin="5"/>--><!--
+                                        -->
+                                <!--<CheckBox Name="InstanceParamIsButt" IsEnabled="False" Content="Is Butt" Margin="5"/>-->
+                                <!--
                                         <StackPanel Orientation="Horizontal" Margin="5 10">
                                             <CheckBox Name="InstanceParamHasLeftFillerStrip"
                                                       IsEnabled="False"
@@ -251,70 +253,71 @@
 
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10"
                                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                            
-                        <StackPanel CanHorizontallyScroll="True" Margin="20 5"
-                                >
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="ⓘ" FontWeight="Bold" Margin="0 0 4 0"/>
-                                <TextBlock Text="Choose Style, Material, HandleSets"/>
-                            </StackPanel>
 
-                            <!--Choose a vendor-style -->
-                            <StackPanel>
-                                <TextBlock>Choose Vendor Style</TextBlock>
-                                <ComboBox x:Name="VendorStyleFinish_VendorName" 
+                            <StackPanel CanHorizontallyScroll="True" Margin="20 5"
+                                >
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="ⓘ" FontWeight="Bold" Margin="0 0 4 0"/>
+                                    <TextBlock Text="Choose Style, Material, HandleSets"/>
+                                </StackPanel>
+
+                                <!--Choose a vendor-style -->
+                                <StackPanel>
+                                    <!--<TextBlock>Choose Vendor Style</TextBlock>
+                                    <ComboBox x:Name="VendorStyleFinish_VendorName" 
                                           ItemsSource="{Binding Vendors}" 
                                           SelectedItem="{Binding SelectedVendor}"
-                                          SelectionChanged="VendorStyleFinish_VendorName_SelectionChanged" />
-                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                    <ItemsControl ItemsSource="{Binding AvailableStyles}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                    <Button Command="{Binding DataContext.SelectStyleCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                          SelectionChanged="VendorStyleFinish_VendorName_SelectionChanged" />-->
+
+                                    <!--<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                        <ItemsControl ItemsSource="{Binding AvailableStyles}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                        <Button Command="{Binding DataContext.SelectStyleCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                                             CommandParameter="{Binding}" 
                                                             MinWidth="100" 
                                                             Background="Transparent" 
                                                             Padding="0" 
                                                             Margin="0" 
                                                             BorderThickness="0">
-                                                        <StackPanel>
-                                                            <Image Width="70" Source="{Binding ImagePath}" />
-                                                            <TextBlock Text="{Binding StyleName}" 
+                                                            <StackPanel>
+                                                                <Image Width="70" Source="{Binding ImagePath}" />
+                                                                <TextBlock Text="{Binding StyleName}" 
                                                                        VerticalAlignment="Center" 
                                                                        HorizontalAlignment="Center" 
                                                                        Foreground="Black" 
                                                                        FontSize="14px" />
-                                                        </StackPanel>
-                                                    </Button>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>
+                                                            </StackPanel>
+                                                        </Button>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>-->
 
 
-                            <!--Choose a vendor-Finish -->
-                                <TextBlock>Choose Finish</TextBlock>
-                                <ComboBox x:Name="InstancePptyFinish" 
+                                    <!--Choose a vendor-Finish -->
+                                    <!--<TextBlock>Choose Finish</TextBlock>
+                                    <ComboBox x:Name="InstancePptyFinish" 
                                           ItemsSource="{Binding AvailableFinishes}" 
                                           SelectedItem="{Binding SelectedFinish}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Source="{Binding ImagePath}" Width="20" Height="20" Margin="5"/>
-                                                <TextBlock Text="{Binding FinishName}" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="{Binding ImagePath}" Width="20" Height="20" Margin="5"/>
+                                                    <TextBlock Text="{Binding FinishName}" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
 
-                                <Button Command="{Binding ApplyFinishCommand}">Apply Finish</Button>
-                            </StackPanel>
+                                    <Button Command="{Binding ApplyFinishCommand}">Apply Finish</Button>-->
+                                </StackPanel>
 
 
-                            <!--Choose a vendor-style -->
-                            <!--<StackPanel>
+                                <!--Choose a vendor-style -->
+                                <!--<StackPanel>
                                 <TextBlock>Choose vendor Style</TextBlock>
                                 <ComboBox x:Name="VendorStyleFinish_VendorName" SelectionChanged="VendorStyleFinish_VendorName_SelectionChanged" ></ComboBox>
                                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
@@ -416,177 +419,250 @@
                             </StackPanel>-->
 
 
-                            <TabControl>
-                                <TabItem Header="Vendors">
-                                    <!-- Sub-Tabs -->
-                                    <TabControl Margin="0 10" BorderThickness="1">
-                                        <TabItem Header="Aristokraft">
-                                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                            </ScrollViewer>
-                                        </TabItem>
-
-                                        <TabItem Header="Yourktowne-Classic">
-                                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
-                                                <StackPanel Name="StyleInstanceParam" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
-
-                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                        <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                            <StackPanel>
-                                                                <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/benton-birch-Arid.jpg"/>
-                                                                <TextBlock Text="Henning" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
-                                                            </StackPanel>
-                                                        </Button>
-                                                    </Border>
-                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                        <Button Click="ClickCustomizeStyle" Tag="Style2" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                            <StackPanel>
-                                                                <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/brelin-purestyle-frost.jpg"/>
-                                                                <TextBlock Text="Touraine Birch" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
-                                                            </StackPanel>
-                                                        </Button>
-                                                    </Border>
-                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                        <Button Click="ClickCustomizeStyle" Tag="Style3" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                            <StackPanel>
-                                                                <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/eclipse-metropolitan.png"/>
-                                                                <TextBlock Text="Still Water" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
-                                                            </StackPanel>
-                                                        </Button>
-                                                    </Border>
-                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                        <Button Click="ClickCustomizeStyle" Tag="Style4" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                            <StackPanel>
+                                <TabControl>
+                                    <TabItem Header="Vendors">
+                                        <!-- Sub-Tabs -->
+                                        <TabControl Margin="0 10" BorderThickness="1">
+                                            <TabItem Header="Aristokraft">
+                                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                                    <StackPanel Name="StyleInstanceParam2" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
                                                                     <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/sinclair-birch-Natural.jpg"/>
-                                                                <TextBlock Text="FillMore" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
-                                                            </StackPanel>
-                                                        </Button>
-                                                    </Border>
-                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                        <Button Click="ClickCustomizeStyle" Tag="Style5" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                            <StackPanel>
+                                                                    <TextBlock Text="Sinclair" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/benton-birch-Arid.jpg"/>
+                                                                    <TextBlock Text="Benton" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/brelin-purestyle-frost.jpg"/>
+                                                                    <TextBlock Text="Brelin" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
                                                                     <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/winstead-birch-flagstone.jpg"/>
-                                                                <TextBlock Text="Langdon" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
-                                                            </StackPanel>
-                                                        </Button>
-                                                    </Border>
-                                                    <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                        <Button Click="ClickCustomizeStyle" Tag="Style6" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                            <StackPanel>
+                                                                    <TextBlock Text="Winstead" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </ScrollViewer>
+                                            </TabItem>
+
+                                            <TabItem Header="Yourktowne-Classic">
+                                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                                                    <StackPanel Name="StyleInstanceParam" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
+
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/benton-birch-Arid.jpg"/>
+                                                                    <TextBlock Text="Henning" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style3" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/eclipse-metropolitan.png"/>
+                                                                    <TextBlock Text="Still Water" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style4" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/sinclair-birch-Natural.jpg"/>
+                                                                    <TextBlock Text="FillMore" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style2" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/brelin-purestyle-frost.jpg"/>
+                                                                    <TextBlock Text="Touraine Birch" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style5" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/winstead-birch-flagstone.jpg"/>
+                                                                    <TextBlock Text="Langdon" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style6" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
                                                                     <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/ytc-fillmore.png"/>
-                                                                <TextBlock Text="Langdon" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
-                                                            </StackPanel>
-                                                        </Button>
-                                                    </Border>
+                                                                    <TextBlock Text="Langdon" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
 
-                                                </StackPanel>
-                                            </ScrollViewer>
-                                        </TabItem>
-
-                                        <TabItem Header="Aristokraft">
-                                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                            </ScrollViewer>
-                                        </TabItem>
-
-                                        <TabItem Header="Yorktowne-Historic (Demo)">
-                                        </TabItem>
-                                    </TabControl>
-
-
-                                </TabItem>
-
-                                <TabItem Header="Finish">
-
-                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
-                                        <StackPanel Name="MaterialInstanceParam" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
-
-                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                    <StackPanel>
-                                                        <Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langon.png"/>
-                                                        <TextBlock Text="Cherry" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
                                                     </StackPanel>
-                                                </Button>
-                                            </Border>
-                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                    <StackPanel>
-                                                        <Image Width="70" Source="/ek24;component/Resources/material/styles/ek_styles/ytc-fillmore.png"/>
-                                                        <TextBlock Text="Hickory" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                </ScrollViewer>
+                                            </TabItem>
+
+                                            <TabItem Header="Eclipse">
+                                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                                                    <StackPanel Name="StyleInstanceParam3" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
+
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/eclipse-metropolitan.png"/>
+                                                                    <TextBlock Text="Metropolitan" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
                                                     </StackPanel>
-                                                </Button>
-                                            </Border>
+                                                </ScrollViewer>
+                                            </TabItem>
+                                            <TabItem Header="Yourktowne-Classic">
+                                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                                                    <StackPanel Name="StyleInstanceParam4" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
 
-                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                    <StackPanel>
-                                                        <Image Width="70" Source="/ek24;component/Resources/material/maple.png"/>
-                                                        <TextBlock Text="Maple" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/yth-corsica.png"/>
+                                                                    <TextBlock Text="Corsica" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
+                                                        <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                            <Button Click="ClickCustomizeStyle" Tag="Style1" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                                <StackPanel>
+                                                                    <Image Width="70" Source="/ek24;component/Resources/images/styles/ek_styles/yth-langdon.png"/>
+                                                                    <TextBlock Text="Langdon" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </Border>
                                                     </StackPanel>
-                                                </Button>
-                                            </Border>
+                                                </ScrollViewer>
+                                            </TabItem>
 
-                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                    <StackPanel>
-                                                        <Image Width="70" Source="/ek24;component/Resources/material/oak.png"/>
-                                                        <TextBlock Text="Oak" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
-                                                    </StackPanel>
-                                                </Button>
-                                            </Border>
 
-                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                    <StackPanel>
-                                                        <Image Width="70" Source="/ek24;component/Resources/material/rusticmaple.png"/>
-                                                        <TextBlock Text="Rustic maple" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
-                                                    </StackPanel>
-                                                </Button>
-                                            </Border>
 
-                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                    <StackPanel>
-                                                        <Image Width="70" Source="/ek24;component/Resources/material/SGCherryjpeg.png"/>
-                                                        <TextBlock Text="Straight Grain" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
-                                                        <TextBlock Text="Cherry" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
-                                                    </StackPanel>
-                                                </Button>
-                                            </Border>
+                                        </TabControl>
 
-                                        </StackPanel>
-                                    </ScrollViewer>
 
-                                </TabItem>
+                                    </TabItem>
 
-                                <TabItem Header="Handles" >
+                                    <!--<TabItem Header="Finish">
 
-                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
-                                        <StackPanel Name="HandleInstanceParam" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
+                                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                                            <StackPanel Name="MaterialInstanceParam" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
 
-                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                    <StackPanel>
-                                                        <Image Height="100" Source="/ek24;component/Resources/handlesets/transitional.png"/>
-                                                        <TextBlock Text="Transitional" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
-                                                        <TextBlock Text="Pull" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
-                                                    </StackPanel>
-                                                </Button>
-                                            </Border>
-                                            <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
-                                                <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
-                                                    <StackPanel>
-                                                        <Image Width="70" Source="/ek24;component/Resources/handlesets/traditionalknob.png"/>
-                                                        <TextBlock Text="Traditional" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
-                                                        <TextBlock Text="Knob" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
-                                                    </StackPanel>
-                                                </Button>
-                                            </Border>
+                                                <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                    <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                        <StackPanel>
+                                                            -->
+                                    <!--<Image Width="70" Source="/ek24;component/Resources/styles/ek_styles/yth-langon.png"/>-->
+                                    <!--
+                                                            <TextBlock Text="Cherry" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Border>
+                                                <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                    <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                        <StackPanel>
+                                                            -->
+                                    <!--<Image Width="70" Source="/ek24;component/Resources/material/styles/ek_styles/ytc-fillmore.png"/>-->
+                                    <!--
+                                                            <TextBlock Text="Hickory" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Border>
 
-                                        </StackPanel>
-                                    </ScrollViewer>
-                                </TabItem>
-                            </TabControl>
-                        </StackPanel>
+                                                <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                    <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                        <StackPanel>
+                                                            <Image Width="70" Source="/ek24;component/Resources/material/maple.png"/>
+                                                            <TextBlock Text="Maple" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Border>
+
+                                                <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                    <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                        <StackPanel>
+                                                            <Image Width="70" Source="/ek24;component/Resources/material/oak.png"/>
+                                                            <TextBlock Text="Oak" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Border>
+
+                                                <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                    <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                        <StackPanel>
+                                                            <Image Width="70" Source="/ek24;component/Resources/material/rusticmaple.png"/>
+                                                            <TextBlock Text="Rustic maple" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Border>
+
+                                                <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                    <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                        <StackPanel>
+                                                            <Image Width="70" Source="/ek24;component/Resources/material/SGCherryjpeg.png"/>
+                                                            <TextBlock Text="Straight Grain" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                            <TextBlock Text="Cherry" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Border>
+
+                                            </StackPanel>
+                                        </ScrollViewer>
+
+                                    </TabItem>-->
+
+                                    <!--<TabItem Header="Handles" >
+
+                                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"  >
+                                            <StackPanel Name="HandleInstanceParam" IsEnabled="False" Height="160" CanHorizontallyScroll="True" Orientation="Horizontal">
+
+                                                <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                    <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                        <StackPanel>
+                                                            <Image Height="100" Source="/ek24;component/Resources/handlesets/transitional.png"/>
+                                                            <TextBlock Text="Transitional" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                            <TextBlock Text="Pull" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Border>
+                                                <Border CornerRadius="10" BorderThickness="1" BorderBrush="LightGray" Padding="0" Margin="5">
+                                                    <Button Click="ClickCustomizeStyle" MinWidth="100" Background="Transparent" Padding="0" Margin="0" BorderThickness="0">
+                                                        <StackPanel>
+                                                            <Image Width="70" Source="/ek24;component/Resources/handlesets/traditionalknob.png"/>
+                                                            <TextBlock Text="Traditional" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                            <TextBlock Text="Knob" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black"  FontSize="14px" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Border>
+
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                    </TabItem>-->
+
+                                </TabControl>
+                            </StackPanel>
                         </ScrollViewer>
                     </Border>
 

@@ -444,8 +444,8 @@ public static class EagleKitchenViewModel
     public static void UpdateStyleFinishHandlesUi(Selection currentSelection, Document doc)
     {
         EagleKitchenDockUtils.EagleKitchenMainUi.StyleInstanceParam.IsEnabled = false;
-        EagleKitchenDockUtils.EagleKitchenMainUi.MaterialInstanceParam.IsEnabled = false;
-        EagleKitchenDockUtils.EagleKitchenMainUi.HandleInstanceParam.IsEnabled = false;
+        //EagleKitchenDockUtils.EagleKitchenMainUi.MaterialInstanceParam.IsEnabled = false;
+        //EagleKitchenDockUtils.EagleKitchenMainUi.HandleInstanceParam.IsEnabled = false;
 
         var selectedIds = currentSelection.GetElementIds();
         // If not all Objects are not CaseWork category then Exit.
@@ -457,8 +457,8 @@ public static class EagleKitchenViewModel
         if (!AllFamilyInstancesHaveTargetParam(selectedIds, doc, "Casework_Style")) return;
 
         EagleKitchenDockUtils.EagleKitchenMainUi.StyleInstanceParam.IsEnabled = true;
-        EagleKitchenDockUtils.EagleKitchenMainUi.MaterialInstanceParam.IsEnabled = true;
-        EagleKitchenDockUtils.EagleKitchenMainUi.HandleInstanceParam.IsEnabled = true;
+        //EagleKitchenDockUtils.EagleKitchenMainUi.MaterialInstanceParam.IsEnabled = true;
+        //EagleKitchenDockUtils.EagleKitchenMainUi.HandleInstanceParam.IsEnabled = true;
     }
 
     public static bool AllElementsAreCaseworkMillWork(ICollection<ElementId> allElementIds, Document doc)

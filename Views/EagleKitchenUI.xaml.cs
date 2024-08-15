@@ -306,7 +306,7 @@ public partial class EagleKitchenMainUi : IDockablePaneProvider
         NewType.Items.Add(defaultItem);
         NewType.SelectedIndex = 0; // Set default item as selected
 
-        InstancePptyFinish.ItemsSource = UiDataService.VendorFinishes;
+        //InstancePptyFinish.ItemsSource = UiDataService.VendorFinishes;
     }
 
     private void NewVendor_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -468,22 +468,22 @@ public partial class EagleKitchenMainUi : IDockablePaneProvider
     private void VendorStyleFinish_VendorName_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         // Get the selected brand
-        string selectedBrand = VendorStyleFinish_VendorName.SelectedItem as string;
+        //string selectedBrand = VendorStyleFinish_VendorName.SelectedItem as string;
 
         // Get the selected brand
-        if (!string.IsNullOrEmpty(selectedBrand))
-        {
-            // Find the brand with the name 'selectedBrand'
-            var targetBrand = UiDataService.BrandsWithShapesAndTypes
-                .FirstOrDefault(brand => brand.BrandName == selectedBrand);
+        //if (!string.IsNullOrEmpty(selectedBrand))
+        //{
+        //    // Find the brand with the name 'selectedBrand'
+        //    var targetBrand = UiDataService.BrandsWithShapesAndTypes
+        //        .FirstOrDefault(brand => brand.BrandName == selectedBrand);
 
-            if (targetBrand != null)
-            {
-            }
-            //var availableStyleFinishes = GetAllStyleFinishesOfAGivenBrand(selectedBrand).ToArray();
+        //    if (targetBrand != null)
+        //    {
+        //    }
+        //    //var availableStyleFinishes = GetAllStyleFinishesOfAGivenBrand(selectedBrand).ToArray();
 
-            // now set the update ui to show only availabe items
-        }
+        //    // now set the update ui to show only availabe items
+        //}
 
 
     }

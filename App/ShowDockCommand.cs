@@ -27,7 +27,8 @@ public class ShowDockCommand : IExternalCommand
         var assembly = Assembly.GetExecutingAssembly();
         var assemblyLocation = assembly.Location;
         const string iconName = "ek24.png";
-        const string fullClassName = "EK24.EagleKitchen.ShowDockCommand";
+        const string fullClassName = "EK24.ShowDockCommand";
+        //const string fullClassName = "EK24.EagleKitchen.ShowDockCommand";
         const string toolTipInfo = "Show the EagleKitchen Dock";
 
         var pushButtonData = new PushButtonData(
