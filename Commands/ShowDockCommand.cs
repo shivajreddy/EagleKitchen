@@ -1,10 +1,10 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using EK24.Utils;
+using EK24_old.Utils;
 using System.Reflection;
 
-namespace EK24;
+namespace EK24_old;
 
 
 [Transaction(TransactionMode.Manual)]
@@ -27,7 +27,7 @@ public class ShowDockCommand : IExternalCommand
         var assembly = Assembly.GetExecutingAssembly();
         var assemblyLocation = assembly.Location;
         const string iconName = "ek24.png";
-        const string fullClassName = "EK24.ShowDockCommand";
+        const string fullClassName = "EK24_old.ShowDockCommand";
         //const string fullClassName = "EK24.EagleKitchen.ShowDockCommand";
         const string toolTipInfo = "Show the EagleKitchen Dock";
 

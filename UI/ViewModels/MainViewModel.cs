@@ -1,6 +1,6 @@
 using GalaSoft.MvvmLight;
 
-namespace EK24.ViewModel
+namespace EK24_old.ViewModel
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.

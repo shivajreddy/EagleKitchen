@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
-using EK24.EagleKitchenView;
-using EK24.JsonModels;
+using EK24_old.EagleKitchenView;
+using EK24_old.JsonModels;
 using GalaSoft.MvvmLight.Command;
 
-namespace EK24.VendorViewModels
+namespace EK24_old.VendorViewModels
 {
     public class VendorStyleFinishViewModel
     {

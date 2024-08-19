@@ -4,7 +4,7 @@
 <!--x:Class="EK24.EagleKitchen.EagleKitchenUi"-->
 <!-- xmlns:util="clr-namespace:EK24.EagleKitchenView"-->
 <Page
-             x:Class="EK24.EagleKitchenView.EagleKitchenMainUi"
+             x:Class="EK24_old.EagleKitchenView.EagleKitchenMainUi"
 
 
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -12,9 +12,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 
-             xmlns:vm="clr-namespace:EK24.VendorViewModels"
+             xmlns:vm="clr-namespace:EK24_old.VendorViewModels"
 
-             xmlns:ek24="clr-namespace:EK24"
+             xmlns:ek24="clr-namespace:EK24_old"
 
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="600"
@@ -66,9 +66,8 @@
                     <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Margin="0 5">
                         <StackPanel Margin="10">
                             <TextBlock Text="VIEWS" TextAlignment="Center" FontSize="18" FontWeight="SemiBold"/>
-
                             <StackPanel Name="ListOfEK24Views" Margin="40 0">
-                                <Button Style="{StaticResource GoToViewButtonStyle}" />
+                                <!--<Button Style="{StaticResource GoToViewButtonStyle}" />-->
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -116,6 +115,10 @@
             <!-- MAIN TAB 2: Selections -->
             <TabItem Header="Selections" FontSize="14">
                 <Grid Margin="10 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="28*"/>
+                        <ColumnDefinition Width="547*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="200"/>
                         <RowDefinition Height="*"/>
@@ -124,8 +127,8 @@
 
                     <!-- This is row 1: instance properties panel -->
                     <Border Grid.Row="0" 
-                            Margin="0 4" BorderBrush="DarkGray"
-                            BorderThickness="1" CornerRadius="4" 
+                            Margin="0,4,0,4" BorderBrush="DarkGray"
+                            BorderThickness="1" CornerRadius="4" Grid.ColumnSpan="2" 
                             >
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10"
                                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -247,8 +250,8 @@
 
                     <!--Row 2: Instance properties: Style/Material/Handles-->
                     <Border Grid.Row="1"
-                            Margin="0 10" BorderBrush="DarkGray"
-                            BorderThickness="1" CornerRadius="4" 
+                            Margin="0,10,0,10" BorderBrush="DarkGray"
+                            BorderThickness="1" CornerRadius="4" Grid.ColumnSpan="2" 
                             >
 
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10"
@@ -668,8 +671,8 @@
 
                     <!-- Row 3: Create new item panel -->
                     <Border Grid.Row="2" 
-                            Margin="0 4" BorderBrush="DarkGray"
-                            BorderThickness="1" CornerRadius="4" 
+                            Margin="0,4,0,4" BorderBrush="DarkGray"
+                            BorderThickness="1" CornerRadius="4" Grid.ColumnSpan="2" 
                             >
                         <StackPanel>
                             <TextBlock TextAlignment="Center">Create New Item</TextBlock>

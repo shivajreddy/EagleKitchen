@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EK24.JsonModels;
+namespace EK24_old.JsonModels;
 
 // Models for ek24_brands_styles.json
 public class JsonBrandsStylesModel

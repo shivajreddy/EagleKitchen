@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using EK24.VendorViewModels;
-using EK24.JsonModels;
+using EK24_old.VendorViewModels;
+using EK24_old.JsonModels;
+using System.Reflection;
 
-namespace EK24.EagleKitchenView;
+namespace EK24_old.EagleKitchenView;
 
 
 // UTILITY class.
@@ -50,7 +51,11 @@ public static class UiDataService
 
     public static void InitializeVendorFinishes()
     {
-        string jsonFilePath = Path.Combine("Resources", "json", "ek24_brands_styles.json");
+        //string jsonFilePath = Path.Combine("Resources", "json", "ek24_brands_styles.json");
+
+        string assemblyFolderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        string jsonFilePath = Path.Combine(assemblyFolderPath, "Resources", "json", "ek24_brands_styles.json");
+
         string json = File.ReadAllText(jsonFilePath);
 
         var root = JsonConvert.DeserializeObject<JsonBrandsStylesModel>(json);
@@ -89,7 +94,11 @@ public static class UiDataService
     // Initializes the data for BrandsWithShapesAndTypes
     public static void InitializeBrandShapesTypes()
     {
-        string jsonFilePath = Path.Combine("Resources", "json", "ek24_brands_shapes_types.json");
+        //string jsonFilePath = Path.Combine("Resources", "json", "ek24_brands_shapes_types.json");
+
+        string assemblyFolderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        string jsonFilePath = Path.Combine(assemblyFolderPath, "Resources", "json", "ek24_brands_shapes_types.json");
+
         string json = File.ReadAllText(jsonFilePath);
 
         var root = JsonConvert.DeserializeObject<JsonBrandsShapesTypesModel>(json);
@@ -114,7 +123,9 @@ public static class UiDataService
     // Initializes the data for BrandsWithStyles and other related properties
     public static void InitializeBrandsStylesFinishes()
     {
-        string jsonFilePath = Path.Combine("Resources", "json", "ek24_brands_styles.json");
+        string assemblyFolderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        string jsonFilePath = Path.Combine(assemblyFolderPath, "Resources", "json", "ek24_brands_styles.json");
+
         string json = File.ReadAllText(jsonFilePath);
 
         var root = JsonConvert.DeserializeObject<JsonBrandsStylesModel>(json);

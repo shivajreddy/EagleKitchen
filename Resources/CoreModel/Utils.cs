@@ -5,7 +5,7 @@ using System.Reflection;
 
 // not using this util now, cuz now we are subscribing to View Activated event, and we are getting the views from the event args.
 // and the function 'OnViewActivated' inside EagleKitchen.cs file
-namespace EK24.EagleKitchen.CoreModel
+namespace EK24_old.EagleKitchen.CoreModel
 {
     public static class Utils
     {

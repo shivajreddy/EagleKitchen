@@ -1,8 +1,8 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
-using EK24.RequestHandlingUtils;
-using EK24.Utils;
+using EK24_old.RequestHandlingUtils;
+using EK24_old.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +14,7 @@ using SelectionChangedEventArgs = Autodesk.Revit.UI.Events.SelectionChangedEvent
 using View = Autodesk.Revit.DB.View;
 
 
-namespace EK24.EagleKitchenView;
+namespace EK24_old.EagleKitchenView;
 
 public enum CabinetConfiguration
 {
@@ -463,7 +463,18 @@ public static class EagleKitchenViewModel
 
     public static bool AllElementsAreCaseworkMillWork(ICollection<ElementId> allElementIds, Document doc)
     {
-        return doc != null && allElementIds != null && allElementIds.Count != 0 && allElementIds.All(elementId => doc.GetElement(elementId).Category.Name == "Casework");
+        //return doc != null && allElementIds != null && allElementIds.Count != 0 && allElementIds.All(elementId => doc.GetElement(elementId).Category.Name == "Casework");
+        return doc != null
+            && allElementIds != null
+            && allElementIds.Count != 0
+            && allElementIds.All(elementId =>
+            {
+                var element = doc.GetElement(elementId);
+                return element != null
+                       && element.Category != null
+                       && element.Category.Name == "Casework";
+            });
+
     }
 
     public static bool AllElementsAreSameFamily(ICollection<ElementId> allElementIds, Document doc)

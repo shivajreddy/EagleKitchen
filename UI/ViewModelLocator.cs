@@ -15,7 +15,7 @@
 using GalaSoft.MvvmLight.Ioc;
 using CommonServiceLocator;
 
-namespace EK24.ViewModel;
+namespace EK24_old.ViewModel;
 
 /// <summary>
 /// This class contains static references to all the view models in the

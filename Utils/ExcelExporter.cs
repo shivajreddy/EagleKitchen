@@ -1,9 +1,9 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
-using EK24.EagleKitchenView;
+using EK24_old.EagleKitchenView;
 
-namespace EK24.Utils
+namespace EK24_old.Utils
 {
     public class ExcelExporter
     {

@@ -1,9 +1,9 @@
 ﻿using Autodesk.Revit.UI;
-using EK24.EagleKitchenView;
+using EK24_old.EagleKitchenView;
 using System;
 
 
-namespace EK24;
+namespace EK24_old;
 
 // This utility class defines the DockablePanel and which internally Creates an instance of the XAML UI,
 // and uses that to
@@ -14,9 +14,9 @@ namespace EK24;
 // is written inside EagleKitchenUtils class
 public static class EagleKitchenDockUtils
 {
-    public static string PanelId = "409EC347-50BC-48D2-BBEB-48B40E799927";
+    public static string PanelId = "5AC2AC54-638F-4E89-9640-AC33D22B7E0B";
     private static readonly DockablePaneId DockId = new DockablePaneId(new Guid(PanelId));
-    private const string DockName = "Eagle Kitchen";
+    private const string DockName = "Eagle Kitchen_old";
     //public static EagleKitchenUi EagleKitchenUi;
     public static EagleKitchenMainUi EagleKitchenMainUi;
 

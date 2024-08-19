@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
-namespace EK24.Utils
+namespace EK24_old.Utils
 {
     public static class ImageUtilities
     {
